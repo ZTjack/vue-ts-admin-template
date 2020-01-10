@@ -47,7 +47,7 @@ export const constantRoutes = [
   }
 ]
 
-export const asyncRoutes = [
+export const asyncRoutes = process.env.NODE_ENV === 'development' ? [
   {
     path: '/permission',
     component: 'layout/Layout',
@@ -186,3 +186,4 @@ export const asyncRoutes = [
 
   { path: '*', redirect: '/404', hidden: true }
 ]
+  : [{ path: '*', redirect: '/404', hidden: true }]
