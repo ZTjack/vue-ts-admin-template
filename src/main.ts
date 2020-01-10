@@ -2,7 +2,7 @@
  * @Author: Jack
  * @Date: 2019-07-24 14:32:25
  * @LastEditors  : Jack
- * @LastEditTime : 2020-01-10 12:14:38
+ * @LastEditTime : 2020-01-10 16:30:21
  * @Description:
  * 1. 采用了normalize作为base.css 然后再引入index.scss
  * 2. 全局引如了elementUI
@@ -28,11 +28,7 @@ import App from './App.vue'
 import store from './store'
 import router from './router'
 
-import './icons' // icon
 import './permission' // permission control
-import './utils/error-log' // error log
-
-import * as filters from './filters' // global filters
 
 /**
  * If you don't want to use mock-server
@@ -42,6 +38,11 @@ import * as filters from './filters' // global filters
  * Currently MockJs will be used in the production environment,
  * please remove it before going online ! ! !
  */
+// TODO: below futures you can choose to use by yourself(if you don't understand, don't use it)
+import './icons' // icon register svg
+import './utils/error-log' // error log
+import * as filters from './filters' // global filters
+
 if (process.env.NODE_ENV === 'production') {
   import('../mock').then(({ mockXHR }) => {
     mockXHR()
