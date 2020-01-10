@@ -24,6 +24,7 @@ module.exports = {
    * In most cases please use '/' !!!
    * Detail: https://cli.vuejs.org/config/#publicpath
    */
+  // if you need to use VSCode's Live Server plugin to test in local, change publicPath: ''
   publicPath: '/',
   outputDir: 'dist',
   assetsDir: 'static',
