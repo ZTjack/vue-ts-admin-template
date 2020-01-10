@@ -2,7 +2,7 @@
  * @Author: Jack
  * @Date: 2019-07-24 14:32:25
  * @LastEditors  : Jack
- * @LastEditTime : 2020-01-10 17:31:50
+ * @LastEditTime : 2020-01-10 17:43:03
  * @Description:
  * 1. 采用了normalize作为base.css 然后再引入index.scss
  * 2. 全局引如了elementUI
@@ -26,12 +26,12 @@ import App from './App.vue'
 import store from './store'
 import router from './router'
 
-import './permission' // permission control
+import './permission.ts' // permission control
 
 // ! below futures you can choose to use by yourself(if you don't know how to use them, remove them)
 /* ****************************************************************************************** */
 
-import './icons' // icon register svg
+import './icons' // register svg icon
 import './utils/error-log' // error log
 import * as filters from './filters' // global filters
 import Cookies from 'js-cookie'
