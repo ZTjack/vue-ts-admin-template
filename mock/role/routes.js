@@ -33,6 +33,11 @@ export const constantRoutes = [
     hidden: true
   },
   {
+    path: '/test',
+    component: 'views/ts-view-demo/index',
+    hidden: true
+  },
+  {
     path: '',
     component: 'layout/Layout',
     redirect: 'dashboard',

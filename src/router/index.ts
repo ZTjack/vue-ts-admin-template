@@ -68,6 +68,11 @@ export const constantRoutes = [
     hidden: true
   },
   {
+    path: '/test',
+    component: () => import('@/views/ts-view-demo/index.vue'),
+    hidden: true
+  },
+  {
     path: '/',
     component: Layout,
     redirect: '/dashboard',
