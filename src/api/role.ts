@@ -1,3 +1,10 @@
+/*
+ * @Author: Jack
+ * @Date: 2020-01-13 17:48:18
+ * @LastEditors: Jack
+ * @LastEditTime: 2020-01-13 17:48:48
+ * @Description:
+ */
 import request from '@/utils/request'
 
 export function getRoutes() {
@@ -14,7 +21,7 @@ export function getRoles() {
   })
 }
 
-export function addRole(data) {
+export function addRole(data:object) {
   return request({
     url: '/role',
     method: 'post',
@@ -22,7 +29,7 @@ export function addRole(data) {
   })
 }
 
-export function updateRole(id, data) {
+export function updateRole(id:number, data:object) {
   return request({
     url: `/role/${id}`,
     method: 'put',
@@ -30,7 +37,7 @@ export function updateRole(id, data) {
   })
 }
 
-export function deleteRole(id) {
+export function deleteRole(id:number) {
   return request({
     url: `/role/${id}`,
     method: 'delete'
