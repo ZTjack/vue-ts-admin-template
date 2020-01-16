@@ -1,5 +1,12 @@
+/*
+ * @Author: Jack
+ * @Date: 2020-01-10 15:40:37
+ * @LastEditors: Jack
+ * @LastEditTime: 2020-01-16 12:11:14
+ * @Description:
+ */
 export default {
-  bind(el, binding, vnode) {
+  bind(el:any, binding:any, vNode:any) {
     const dialogHeaderEl = el.querySelector('.el-dialog__header')
     const dragDom = el.querySelector('.el-dialog')
     dialogHeaderEl.style.cssText += ';cursor:move;'
@@ -7,14 +14,15 @@ export default {
 
     // 获取原有属性 ie dom元素.currentStyle 火狐谷歌 window.getComputedStyle(dom元素, null);
     const getStyle = (function() {
+      // @ts-ignore
       if (window.document.currentStyle) {
-        return (dom, attr) => dom.currentStyle[attr]
+        return (dom:any, attr:any) => dom.currentStyle[attr]
       } else {
-        return (dom, attr) => getComputedStyle(dom, false)[attr]
+        return (dom:any, attr:any) => getComputedStyle(dom, null)[attr]
       }
     })()
 
-    dialogHeaderEl.onmousedown = (e) => {
+    dialogHeaderEl.onmousedown = (e:any) => {
       // 鼠标按下，计算当前元素距离可视区的距离
       const disX = e.clientX - dialogHeaderEl.offsetLeft
       const disY = e.clientY - dialogHeaderEl.offsetTop
@@ -65,7 +73,7 @@ export default {
         dragDom.style.cssText += `;left:${left + styL}px;top:${top + styT}px;`
 
         // emit onDrag event
-        vnode.child.$emit('dragDialog')
+        vNode.child.$emit('dragDialog')
       }
 
       document.onmouseup = function(e) {

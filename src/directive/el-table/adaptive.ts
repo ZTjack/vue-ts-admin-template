@@ -1,3 +1,4 @@
+// @ts-ignore
 import { addResizeListener, removeResizeListener } from 'element-ui/src/utils/resize-event'
 
 /**
@@ -7,8 +8,8 @@ import { addResizeListener, removeResizeListener } from 'element-ui/src/utils/re
  * bottomOffset: 30(default)   // The height of the table from the bottom of the page.
  */
 
-const doResize = (el, binding, vnode) => {
-  const { componentInstance: $table } = vnode
+const doResize = (el:any, binding:any, vNode:any) => {
+  const { componentInstance: $table } = vNode
 
   const { value } = binding
 
@@ -25,17 +26,17 @@ const doResize = (el, binding, vnode) => {
 }
 
 export default {
-  bind(el, binding, vnode) {
+  bind(el:any, binding:any, vNode:any) {
     el.resizeListener = () => {
-      doResize(el, binding, vnode)
+      doResize(el, binding, vNode)
     }
     // parameter 1 is must be "Element" type
     addResizeListener(window.document.body, el.resizeListener)
   },
-  inserted(el, binding, vnode) {
-    doResize(el, binding, vnode)
+  inserted(el:any, binding:any, vNode:any) {
+    doResize(el, binding, vNode)
   },
-  unbind(el) {
+  unbind(el:any) {
     removeResizeListener(window.document.body, el.resizeListener)
   }
 }

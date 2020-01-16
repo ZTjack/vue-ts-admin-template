@@ -47,6 +47,7 @@
   "devDependencies": {
     "@babel/core": "7.0.0",
     "@babel/register": "7.0.0",
+    "@types/clipboard": "^2.0.1",
     "@types/jest": "^23.1.4",
     "@types/js-cookie": "^2.2.4",
     "@types/nprogress": "^0.2.0",

@@ -1,11 +1,19 @@
+/*
+ * @Author: Jack
+ * @Date: 2020-01-13 18:17:00
+ * @LastEditors  : Jack
+ * @LastEditTime : 2020-01-16 12:28:19
+ * @Description:
+ */
 // Inspired by https://github.com/Inndy/vue-clipboard2
-const Clipboard = require('clipboard')
+import Clipboard from 'clipboard'
+
 if (!Clipboard) {
   throw new Error('you should npm install `clipboard` --save at first ')
 }
 
 export default {
-  bind(el, binding) {
+  bind(el:any, binding:any) {
     if (binding.arg === 'success') {
       el._v_clipboard_success = binding.value
     } else if (binding.arg === 'error') {
@@ -26,7 +34,7 @@ export default {
       el._v_clipboard = clipboard
     }
   },
-  update(el, binding) {
+  update(el:any, binding:any) {
     if (binding.arg === 'success') {
       el._v_clipboard_success = binding.value
     } else if (binding.arg === 'error') {
@@ -36,7 +44,7 @@ export default {
       el._v_clipboard.action = function() { return binding.arg === 'cut' ? 'cut' : 'copy' }
     }
   },
-  unbind(el, binding) {
+  unbind(el:any, binding:any) {
     if (binding.arg === 'success') {
       delete el._v_clipboard_success
     } else if (binding.arg === 'error') {
