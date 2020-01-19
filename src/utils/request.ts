@@ -2,12 +2,11 @@
  * @Author: Jack
  * @Date: 2020-01-10 15:40:37
  * @LastEditors  : Jack
- * @LastEditTime : 2020-01-19 14:29:17
+ * @LastEditTime : 2020-01-19 14:53:02
  * @Description:
  */
 import axios from 'axios'
 import { MessageBox, Message } from 'element-ui'
-import store from '@/store'
 import { getToken } from '@/utils/auth'
 import { UserModule } from '@/store/modules/user'
 

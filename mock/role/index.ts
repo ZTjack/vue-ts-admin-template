@@ -1,26 +1,18 @@
+/*
+ * @Author: Jack
+ * @Date: 2020-01-11 10:25:59
+ * @LastEditors  : Jack
+ * @LastEditTime : 2020-01-19 15:53:37
+ * @Description:
+ */
 import Mock from 'mockjs'
-
-// import { deepClone } from '../../src/utils/index.js'
-// TODO: will be deleted
-function deepClone(source) {
-  if (!source && typeof source !== 'object') {
-    throw new Error('error arguments deepClone')
-  }
-  const targetObj = source.constructor === Array ? [] : {}
-  Object.keys(source).forEach(keys => {
-    if (source[keys] && typeof source[keys] === 'object') {
-      targetObj[keys] = deepClone(source[keys])
-    } else {
-      targetObj[keys] = source[keys]
-    }
-  })
-  return targetObj
-}
+import { deepClone } from '../../src/utils'
+import { IRoleData } from '../../src/api/types'
 import { asyncRoutes, constantRoutes } from './routes.js'
 
 const routes = deepClone([...constantRoutes, ...asyncRoutes])
 
-const roles = [
+const roles: IRoleData[] = [
   {
     key: 'admin',
     name: 'admin',
@@ -31,7 +23,7 @@ const roles = [
     key: 'editor',
     name: 'editor',
     description: 'Normal Editor. Can see all pages except permission page',
-    routes: routes.filter(i => i.path !== '/permission')// just a mock
+    routes: (routes as any).filter((i:object) => (i as any).path !== '/permission')// just a mock
   },
   {
     key: 'visitor',
@@ -56,7 +48,7 @@ export default [
   {
     url: '/vue-element-admin/routes',
     type: 'get',
-    response: _ => {
+    response: () => {
       return {
         code: 20000,
         data: routes
@@ -68,7 +60,7 @@ export default [
   {
     url: '/vue-element-admin/roles',
     type: 'get',
-    response: _ => {
+    response: () => {
       return {
         code: 20000,
         data: roles

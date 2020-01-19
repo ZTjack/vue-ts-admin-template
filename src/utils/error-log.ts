@@ -2,7 +2,7 @@
  * @Author: Jack
  * @Date: 2020-01-10 15:40:37
  * @LastEditors  : Jack
- * @LastEditTime : 2020-01-19 12:04:19
+ * @LastEditTime : 2020-01-19 14:52:37
  * @Description:
  */
 import Vue from 'vue'
@@ -16,9 +16,6 @@ const { errorLog: needErrorLog } = settings
 
 function checkNeed() {
   const env = process.env.NODE_ENV
-  if (isString(needErrorLog)) {
-    return env === needErrorLog
-  }
   if (isArray(needErrorLog)) {
     return needErrorLog.includes(env)
   }
@@ -26,7 +23,7 @@ function checkNeed() {
 }
 
 if (checkNeed()) {
-  Vue.config.errorHandler = function(err, vm, info, a) {
+  Vue.config.errorHandler = function(err, vm, info) {
   // Don't ask me why I use Vue.nextTick, it just a hack.
   // detail see https://forum.vuejs.org/t/dispatch-in-vue-config-errorhandler-has-some-problem/23500
     Vue.nextTick(() => {
@@ -36,7 +33,6 @@ if (checkNeed()) {
         info,
         url: window.location.href
       })
-      console.error(err, info)
     })
   }
 }

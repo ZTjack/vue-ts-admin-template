@@ -1,23 +1,13 @@
+/*
+ * @Author: Jack
+ * @Date: 2020-01-11 10:25:59
+ * @LastEditors  : Jack
+ * @LastEditTime : 2020-01-19 16:27:14
+ * @Description:
+ */
+
 import Mock from 'mockjs'
-
-// import { param2Obj } from '../src/utils'
-
-// TODO: will be deleted
-function param2Obj(url) {
-  const search = url.split('?')[1]
-  if (!search) {
-    return {}
-  }
-  return JSON.parse(
-    '{"' +
-      decodeURIComponent(search)
-        .replace(/"/g, '\\"')
-        .replace(/&/g, '","')
-        .replace(/=/g, '":"')
-        .replace(/\+/g, ' ') +
-      '"}'
-  )
-}
+import { param2Obj } from '../src/utils'
 
 import user from './user'
 import role from './role'
@@ -45,8 +35,8 @@ export function mockXHR() {
     this.proxy_send(...arguments)
   }
 
-  function XHR2ExpressReqWrap(respond) {
-    return function(options) {
+  function XHR2ExpressReqWrap(respond:any) {
+    return function(options:any) {
       let result = null
       if (respond instanceof Function) {
         const { body, type, url } = options
@@ -69,11 +59,11 @@ export function mockXHR() {
 }
 
 // for mock server
-const responseFake = (url, type, respond) => {
+const responseFake = (url:string, type:string, respond:any) => {
   return {
     url: new RegExp(`${process.env.VUE_APP_BASE_API}${url}`),
     type: type || 'get',
-    response(req, res) {
+    response(req:any, res:any) {
       console.log('request invoke:' + req.path)
       res.json(Mock.mock(respond instanceof Function ? respond(req, res) : respond))
     }

@@ -1,4 +1,11 @@
-import { validUsername, validURL, validLowerCase, validUpperCase, validAlphabets } from '@/utils/validate.js'
+/*
+ * @Author: Jack
+ * @Date: 2020-01-10 15:40:37
+ * @LastEditors: Jack
+ * @LastEditTime: 2020-01-19 15:45:44
+ * @Description:
+ */
+import { validUsername, validURL, validLowerCase, validUpperCase, validAlphabets } from '@/utils/validate.ts'
 describe('Utils:validate', () => {
   it('validUsername', () => {
     expect(validUsername('admin')).toBe(true)

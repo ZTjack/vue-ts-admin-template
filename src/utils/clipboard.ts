@@ -1,3 +1,10 @@
+/*
+ * @Author: Jack
+ * @Date: 2020-01-10 15:40:37
+ * @LastEditors  : Jack
+ * @LastEditTime : 2020-01-19 14:41:56
+ * @Description:
+ */
 import Vue from 'vue'
 import Clipboard from 'clipboard'
 
@@ -16,8 +23,8 @@ function clipboardError() {
   })
 }
 
-export default function handleClipboard(text, event) {
-  const clipboard = new Clipboard(event.target, {
+export default function handleClipboard(text:string, event:MouseEvent) {
+  const clipboard = new Clipboard(event.target as Element, {
     text: () => text
   })
   clipboard.on('success', () => {
@@ -27,6 +34,6 @@ export default function handleClipboard(text, event) {
   clipboard.on('error', () => {
     clipboardError()
     clipboard.destroy()
-  })
-  clipboard.onClick(event)
+  });
+  (clipboard as any).onClick(event)
 }

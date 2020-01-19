@@ -4,11 +4,12 @@
 
 /**
  * Parse the time to string
- * @param {(Object|string|number)} time
+ * @param {(Date|string|number)} time
  * @param {string} cFormat
  * @returns {string | null}
  */
-export function parseTime(time, cFormat) {
+
+export function parseTime(time: Date | string | number, cFormat?: string) {
   if (arguments.length === 0) {
     return null
   }
@@ -25,7 +26,7 @@ export function parseTime(time, cFormat) {
     }
     date = new Date(time)
   }
-  const formatObj = {
+  const formatObj:{ [key:string]: number} = {
     y: date.getFullYear(),
     m: date.getMonth() + 1,
     d: date.getDate(),
@@ -48,16 +49,16 @@ export function parseTime(time, cFormat) {
  * @param {string} option
  * @returns {string}
  */
-export function formatTime(time, option) {
+export function formatTime(time:number, option:string) {
   if (('' + time).length === 10) {
-    time = parseInt(time) * 1000
+    time = time * 1000
   } else {
     time = +time
   }
   const d = new Date(time)
   const now = Date.now()
 
-  const diff = (now - d) / 1000
+  const diff = (now - d.getTime()) / 1000
 
   if (diff < 30) {
     return '刚刚'
@@ -90,10 +91,10 @@ export function formatTime(time, option) {
  * @param {string} url
  * @returns {Object}
  */
-export function getQueryObject(url) {
+export function getQueryObject(url:string) {
   url = url == null ? window.location.href : url
   const search = url.substring(url.lastIndexOf('?') + 1)
-  const obj = {}
+  const obj:{ [key:string]: string} = {}
   const reg = /([^?&=]+)=([^?&=]*)/g
   search.replace(reg, (rs, $1, $2) => {
     const name = decodeURIComponent($1)
@@ -109,7 +110,7 @@ export function getQueryObject(url) {
  * @param {string} input value
  * @returns {number} output value
  */
-export function byteLength(str) {
+export function byteLength(str:string) {
   // returns the byte length of an utf8 string
   let s = str.length
   for (var i = str.length - 1; i >= 0; i--) {
@@ -125,7 +126,7 @@ export function byteLength(str) {
  * @param {Array} actual
  * @returns {Array}
  */
-export function cleanArray(actual) {
+export function cleanArray(actual: any[]) {
   const newArray = []
   for (let i = 0; i < actual.length; i++) {
     if (actual[i]) {
@@ -139,12 +140,12 @@ export function cleanArray(actual) {
  * @param {Object} json
  * @returns {Array}
  */
-export function param(json) {
+export function param(json:object) {
   if (!json) return ''
   return cleanArray(
     Object.keys(json).map(key => {
-      if (json[key] === undefined) return ''
-      return encodeURIComponent(key) + '=' + encodeURIComponent(json[key])
+      if ((json as any)[key] === undefined) return ''
+      return encodeURIComponent(key) + '=' + encodeURIComponent((json as any)[key])
     })
   ).join('&')
 }
@@ -153,7 +154,8 @@ export function param(json) {
  * @param {string} url
  * @returns {Object}
  */
-export function param2Obj(url) {
+
+export function param2Obj(url:string) {
   const search = url.split('?')[1]
   if (!search) {
     return {}
@@ -173,7 +175,7 @@ export function param2Obj(url) {
  * @param {string} val
  * @returns {string}
  */
-export function html2Text(val) {
+export function html2Text(val:string) {
   const div = document.createElement('div')
   div.innerHTML = val
   return div.textContent || div.innerText
@@ -185,7 +187,7 @@ export function html2Text(val) {
  * @param {(Object|Array)} source
  * @returns {Object}
  */
-export function objectMerge(target, source) {
+export function objectMerge(target:object, source:object) {
   if (typeof target !== 'object') {
     target = {}
   }
@@ -193,11 +195,11 @@ export function objectMerge(target, source) {
     return source.slice()
   }
   Object.keys(source).forEach(property => {
-    const sourceProperty = source[property]
+    const sourceProperty = (source as any)[property]
     if (typeof sourceProperty === 'object') {
-      target[property] = objectMerge(target[property], sourceProperty)
+      (target as any)[property] = objectMerge((target as any)[property], sourceProperty)
     } else {
-      target[property] = sourceProperty
+      (target as any)[property] = sourceProperty
     }
   })
   return target
@@ -207,7 +209,7 @@ export function objectMerge(target, source) {
  * @param {HTMLElement} element
  * @param {string} className
  */
-export function toggleClass(element, className) {
+export function toggleClass(element:HTMLElement, className:string) {
   if (!element || !className) {
     return
   }
@@ -227,7 +229,7 @@ export function toggleClass(element, className) {
  * @param {string} type
  * @returns {Date}
  */
-export function getTime(type) {
+export function getTime(type:string) {
   if (type === 'start') {
     return new Date().getTime() - 3600 * 1000 * 24 * 90
   } else {
@@ -241,8 +243,8 @@ export function getTime(type) {
  * @param {boolean} immediate
  * @return {*}
  */
-export function debounce(func, wait, immediate) {
-  let timeout, args, context, timestamp, result
+export function debounce(func:Function, wait:number, immediate:boolean) {
+  let timeout:any, args:any, context:any, timestamp:number, result:any
 
   const later = function() {
     // 据上一次触发时间间隔
@@ -261,7 +263,8 @@ export function debounce(func, wait, immediate) {
     }
   }
 
-  return function(...args) {
+  return function(...args:any) {
+    // @ts-ignore
     context = this
     timestamp = +new Date()
     const callNow = immediate && !timeout
@@ -283,16 +286,16 @@ export function debounce(func, wait, immediate) {
  * @param {Object} source
  * @returns {Object}
  */
-export function deepClone(source) {
+export function deepClone(source:object) {
   if (!source && typeof source !== 'object') {
-    throw new Error('error arguments', 'deepClone')
+    throw new Error('error arguments deepClone')
   }
   const targetObj = source.constructor === Array ? [] : {}
   Object.keys(source).forEach(keys => {
-    if (source[keys] && typeof source[keys] === 'object') {
-      targetObj[keys] = deepClone(source[keys])
+    if ((source as any)[keys] && typeof (source as any)[keys] === 'object') {
+      (targetObj as any)[keys] = deepClone((source as any)[keys])
     } else {
-      targetObj[keys] = source[keys]
+      (targetObj as any)[keys] = (source as any)[keys]
     }
   })
   return targetObj
@@ -302,7 +305,7 @@ export function deepClone(source) {
  * @param {Array} arr
  * @returns {Array}
  */
-export function uniqueArr(arr) {
+export function uniqueArr(arr:any[]) {
   return Array.from(new Set(arr))
 }
 
@@ -311,7 +314,7 @@ export function uniqueArr(arr) {
  */
 export function createUniqueString() {
   const timestamp = +new Date() + ''
-  const randomNum = parseInt((1 + Math.random()) * 65536) + ''
+  const randomNum = parseInt(((1 + Math.random()) * 65536).toString()) + ''
   return (+(randomNum + timestamp)).toString(32)
 }
 
@@ -321,7 +324,7 @@ export function createUniqueString() {
  * @param {string} cls
  * @returns {boolean}
  */
-export function hasClass(ele, cls) {
+export function hasClass(ele:HTMLElement, cls:string) {
   return !!ele.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'))
 }
 
@@ -330,7 +333,7 @@ export function hasClass(ele, cls) {
  * @param {HTMLElement} elm
  * @param {string} cls
  */
-export function addClass(ele, cls) {
+export function addClass(ele:HTMLElement, cls:string) {
   if (!hasClass(ele, cls)) ele.className += ' ' + cls
 }
 
@@ -339,7 +342,7 @@ export function addClass(ele, cls) {
  * @param {HTMLElement} elm
  * @param {string} cls
  */
-export function removeClass(ele, cls) {
+export function removeClass(ele:HTMLElement, cls:string) {
   if (hasClass(ele, cls)) {
     const reg = new RegExp('(\\s|^)' + cls + '(\\s|$)')
     ele.className = ele.className.replace(reg, ' ')

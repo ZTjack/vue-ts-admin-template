@@ -1,8 +1,8 @@
 /*
  * @Author: Jack
  * @Date: 2020-01-10 15:40:37
- * @LastEditors: Jack
- * @LastEditTime: 2020-01-16 18:17:36
+ * @LastEditors  : Jack
+ * @LastEditTime : 2020-01-19 14:37:48
  * @Description:
  */
 import Cookies from 'js-cookie'
@@ -13,7 +13,7 @@ export function getToken() {
   return Cookies.get(TokenKey)
 }
 
-export function setToken(token) {
+export function setToken(token:string) {
   return Cookies.set(TokenKey, token)
 }
 
