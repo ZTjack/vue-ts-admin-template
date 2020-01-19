@@ -1,3 +1,10 @@
+<!--
+ * @Author: Jack
+ * @Date: 2020-01-10 15:40:37
+ * @LastEditors  : Jack
+ * @LastEditTime : 2020-01-19 13:58:06
+ * @Description:
+ -->
 <template>
   <div :class="{'has-logo':showLogo}">
     <logo v-if="showLogo" :collapse="isCollapse" />
@@ -18,37 +25,52 @@
   </div>
 </template>
 
-<script>
-import { mapGetters } from 'vuex'
-import Logo from './Logo'
-import SidebarItem from './SidebarItem'
+<script lang="ts">
+
+import { Component, Vue } from 'vue-property-decorator'
+import { AppModule } from '@/store/modules/app'
+import { PermissionModule } from '@/store/modules/permission'
+import { SettingsModule } from '@/store/modules/settings'
+import Logo from './Logo.vue'
+import SidebarItem from './SidebarItem.vue'
 import variables from '@/styles/variables.scss'
 
-export default {
-  components: { SidebarItem, Logo },
-  computed: {
-    ...mapGetters([
-      'permission_routes',
-      'sidebar'
-    ]),
-    activeMenu() {
-      const route = this.$route
-      const { meta, path } = route
-      // if set path, the sidebar will highlight the path you set
-      if (meta.activeMenu) {
-        return meta.activeMenu
-      }
-      return path
-    },
-    showLogo() {
-      return this.$store.state.settings.sidebarLogo
-    },
-    variables() {
-      return variables
-    },
-    isCollapse() {
-      return !this.sidebar.opened
+@Component({
+  name: 'SideBar',
+  components: {
+    SidebarItem,
+    Logo
+  }
+})
+export default class extends Vue {
+  get permission_routes() {
+    return PermissionModule.routes
+  }
+
+  get sidebar() {
+    return AppModule.sidebar
+  }
+
+  get activeMenu() {
+    const route = this.$route
+    const { meta, path } = route
+    // if set path, the sidebar will highlight the path you set
+    if (meta.activeMenu) {
+      return meta.activeMenu
     }
+    return path
+  }
+
+  get showLogo() {
+    return SettingsModule.sidebarLogo
+  }
+
+  get variables() {
+    return variables
+  }
+
+  get isCollapse() {
+    return !this.sidebar.opened
   }
 }
 </script>

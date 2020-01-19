@@ -1,4 +1,11 @@
-import store from '@/store'
+/*
+ * @Author: Jack
+ * @Date: 2020-01-10 15:40:37
+ * @LastEditors  : Jack
+ * @LastEditTime : 2020-01-19 14:28:28
+ * @Description:
+ */
+import { UserModule } from '@/store/modules/user'
 
 /**
  * @param {Array} value
@@ -7,7 +14,7 @@ import store from '@/store'
  */
 export default function checkPermission(value) {
   if (value && value instanceof Array && value.length > 0) {
-    const roles = store.getters && store.getters.roles
+    const roles = UserModule.roles
     const permissionRoles = value
 
     const hasPermission = roles.some(role => {

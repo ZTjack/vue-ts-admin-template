@@ -1,8 +1,8 @@
 /*
  * @Author: Jack
  * @Date: 2020-01-16 14:06:01
- * @LastEditors: Jack
- * @LastEditTime: 2020-01-16 17:39:37
+ * @LastEditors  : Jack
+ * @LastEditTime : 2020-01-19 13:57:04
  * @Description:
  */
 
@@ -63,22 +63,22 @@ class App extends VuexModule implements IAppState {
   }
 
   @Action
-  public ToggleSideBar() {
+  public toggleSideBar() {
     this.TOGGLE_SIDEBAR()
   }
 
   @Action
-  public CloseSideBar(withoutAnimation: boolean) {
+  public closeSideBar(withoutAnimation: boolean) {
     this.CLOSE_SIDEBAR(withoutAnimation)
   }
 
   @Action
-  public ToggleDevice(device: DeviceType) {
+  public toggleDevice(device: DeviceType) {
     this.TOGGLE_DEVICE(device)
   }
 
   @Action
-  public SetSize(size: string) {
+  public setSize(size: string) {
     this.SET_SIZE(size)
   }
 }

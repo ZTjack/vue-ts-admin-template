@@ -13,6 +13,8 @@
     "sourceMap": true,
     "baseUrl": ".",
     "types": [
+      // 不然不认识node包，比如path
+      "node",
       "webpack-env",
       "jest"
     ],

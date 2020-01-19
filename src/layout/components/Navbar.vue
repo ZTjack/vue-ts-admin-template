@@ -45,18 +45,19 @@
   </div>
 </template>
 
-<script>
-import { mapGetters } from 'vuex'
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator'
 import { AppModule } from '@/store/modules/app'
 import { UserModule } from '@/store/modules/user'
-import Breadcrumb from '@/components/Breadcrumb'
-import Hamburger from '@/components/Hamburger'
-import ErrorLog from '@/components/ErrorLog'
-import Screenfull from '@/components/Screenfull'
-import SizeSelect from '@/components/SizeSelect'
-import Search from '@/components/HeaderSearch'
+import Breadcrumb from '@/components/Breadcrumb/index.vue'
+import Hamburger from '@/components/Hamburger/index.vue'
+import ErrorLog from '@/components/ErrorLog/index.vue'
+import Screenfull from '@/components/Screenfull/index.vue'
+import SizeSelect from '@/components/SizeSelect/index.vue'
+import Search from '@/components/HeaderSearch/index.vue'
 
-export default {
+@Component({
+  name: 'Navbar',
   components: {
     Breadcrumb,
     Hamburger,
@@ -64,22 +65,28 @@ export default {
     Screenfull,
     SizeSelect,
     Search
-  },
-  computed: {
-    ...mapGetters([
-      'sidebar',
-      'avatar',
-      'device'
-    ])
-  },
-  methods: {
-    toggleSideBar() {
-      AppModule.toggleSideBar()
-    },
-    async logout() {
-      await UserModule.logout()
-      this.$router.push(`/login?redirect=${this.$route.fullPath}`)
-    }
+  }
+})
+export default class extends Vue {
+  get sidebar() {
+    return AppModule.sidebar
+  }
+
+  get avatar() {
+    return UserModule.avatar
+  }
+
+  get device() {
+    return AppModule.device
+  }
+
+  private toggleSideBar() {
+    AppModule.toggleSideBar()
+  }
+
+  private async logout() {
+    await UserModule.logout()
+    this.$router.push(`/login?redirect=${this.$route.fullPath}`)
   }
 }
 </script>

@@ -2,7 +2,7 @@
  * @Author: Jack
  * @Date: 2020-01-10 15:40:37
  * @LastEditors  : Jack
- * @LastEditTime : 2020-01-19 12:04:01
+ * @LastEditTime : 2020-01-19 14:29:17
  * @Description:
  */
 import axios from 'axios'
@@ -23,7 +23,7 @@ service.interceptors.request.use(
   config => {
     // do something before request is sent
 
-    if (store.getters.token) {
+    if (UserModule.token) {
       // let each request carry token
       // ['X-Token'] is a custom headers key
       // please modify it according to the actual situation

@@ -1,3 +1,10 @@
+<!--
+ * @Author: Jack
+ * @Date: 2020-01-10 15:40:37
+ * @LastEditors  : Jack
+ * @LastEditTime : 2020-01-19 12:54:16
+ * @Description:
+ -->
 <template>
   <div class="app-container">
     <div v-if="user">
@@ -28,40 +35,49 @@
   </div>
 </template>
 
-<script>
-import { mapGetters } from 'vuex'
-import UserCard from './components/UserCard'
-import Activity from './components/Activity'
-import Timeline from './components/Timeline'
-import Account from './components/Account'
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator'
+import { UserModule } from '@/store/modules/user'
+import UserCard from './components/UserCard.vue'
+import Activity from './components/Activity.vue'
+import Timeline from './components/Timeline.vue'
+import Account from './components/Account.vue'
 
-export default {
+@Component({
   name: 'Profile',
-  components: { UserCard, Activity, Timeline, Account },
-  data() {
-    return {
-      user: {},
-      activeTab: 'activity'
-    }
-  },
-  computed: {
-    ...mapGetters([
-      'name',
-      'avatar',
-      'roles'
-    ])
-  },
+  components: {
+    Account,
+    Activity,
+    Timeline,
+    UserCard
+  }
+})
+export default class extends Vue {
+  private user = {}
+  private activeTab = 'activity'
+
+  get name() {
+    return UserModule.name
+  }
+
+  get avatar() {
+    return UserModule.avatar
+  }
+
+  get roles() {
+    return UserModule.roles
+  }
+
   created() {
     this.getUser()
-  },
-  methods: {
-    getUser() {
-      this.user = {
-        name: this.name,
-        role: this.roles.join(' | '),
-        email: 'admin@test.com',
-        avatar: this.avatar
-      }
+  }
+
+  private getUser() {
+    this.user = {
+      name: this.name,
+      role: this.roles.join(' | '),
+      email: 'admin@test.com',
+      avatar: this.avatar
     }
   }
 }

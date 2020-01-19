@@ -2,7 +2,7 @@
  * @Author: Jack
  * @Date: 2020-01-10 15:40:37
  * @LastEditors  : Jack
- * @LastEditTime : 2020-01-19 11:14:30
+ * @LastEditTime : 2020-01-19 14:26:43
  * @Description:
  -->
 <template>
@@ -19,49 +19,44 @@
   </el-dropdown>
 </template>
 
-<script>
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator'
 import { AppModule } from '@/store/modules/app'
 import { TagsViewModule } from '@/store/modules/tagsView'
 
-export default {
-  data() {
-    return {
-      sizeOptions: [
-        { label: 'Default', value: 'default' },
-        { label: 'Medium', value: 'medium' },
-        { label: 'Small', value: 'small' },
-        { label: 'Mini', value: 'mini' }
-      ]
-    }
-  },
-  computed: {
-    size() {
-      return this.$store.getters.size
-    }
-  },
-  methods: {
-    handleSetSize(size) {
-      this.$ELEMENT.size = size
-      AppModule.setSize(size)
-      this.refreshView()
-      this.$message({
-        message: 'Switch Size Success',
-        type: 'success'
-      })
-    },
-    refreshView() {
-      // In order to make the cached page re-rendered
-      TagsViewModule.delAllCachedViews()
+@Component({
+  name: 'SizeSelect'
+})
+export default class extends Vue {
+  private sizeOptions = [
+    { label: 'Default', value: 'default' },
+    { label: 'Medium', value: 'medium' },
+    { label: 'Small', value: 'small' },
+    { label: 'Mini', value: 'mini' }
+  ]
 
-      const { fullPath } = this.$route
-
-      this.$nextTick(() => {
-        this.$router.replace({
-          path: '/redirect' + fullPath
-        })
-      })
-    }
+  get size() {
+    return AppModule.size
   }
 
+  private handleSetSize(size:string) {
+    (this as any).$ELEMENT.size = size
+    AppModule.setSize(size)
+    this.refreshView()
+    this.$message({
+      message: 'Switch Size Success',
+      type: 'success'
+    })
+  }
+  private refreshView() {
+    // In order to make the cached page re-rendered
+    TagsViewModule.delAllCachedViews()
+    const { fullPath } = this.$route
+    this.$nextTick(() => {
+      this.$router.replace({
+        path: '/redirect' + fullPath
+      })
+    })
+  }
 }
 </script>

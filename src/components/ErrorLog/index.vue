@@ -47,26 +47,24 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator'
 import { ErrorLogModule } from '@/store/modules/errorLog'
 
-export default {
-  name: 'ErrorLog',
-  data() {
-    return {
-      dialogTableVisible: false
-    }
-  },
-  computed: {
-    errorLogs() {
-      return this.$store.getters.errorLogs
-    }
-  },
-  methods: {
-    clearAll() {
-      this.dialogTableVisible = false
-      ErrorLogModule.clearErrorLog()
-    }
+@Component({
+  name: 'ErrorLog'
+})
+
+export default class extends Vue {
+  private dialogTableVisible = false
+
+  get errorLogs() {
+    return ErrorLogModule.logs
+  }
+
+  private clearAll() {
+    this.dialogTableVisible = false
+    ErrorLogModule.clearErrorLog()
   }
 }
 </script>
