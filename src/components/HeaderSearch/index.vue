@@ -101,7 +101,7 @@ export default {
 
       for (const router of routes) {
         // skip hidden router
-        if (router.hidden) { continue }
+        if (router.meta && router.meta.hidden) { continue }
 
         const data = {
           path: path.resolve(basePath, router.path),

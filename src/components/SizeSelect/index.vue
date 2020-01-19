@@ -1,3 +1,10 @@
+<!--
+ * @Author: Jack
+ * @Date: 2020-01-10 15:40:37
+ * @LastEditors  : Jack
+ * @LastEditTime : 2020-01-19 11:14:30
+ * @Description:
+ -->
 <template>
   <el-dropdown trigger="click" @command="handleSetSize">
     <div>
@@ -13,6 +20,9 @@
 </template>
 
 <script>
+import { AppModule } from '@/store/modules/app'
+import { TagsViewModule } from '@/store/modules/tagsView'
+
 export default {
   data() {
     return {
@@ -32,7 +42,7 @@ export default {
   methods: {
     handleSetSize(size) {
       this.$ELEMENT.size = size
-      this.$store.dispatch('app/setSize', size)
+      AppModule.setSize(size)
       this.refreshView()
       this.$message({
         message: 'Switch Size Success',
@@ -41,7 +51,7 @@ export default {
     },
     refreshView() {
       // In order to make the cached page re-rendered
-      this.$store.dispatch('tagsView/delAllCachedViews', this.$route)
+      TagsViewModule.delAllCachedViews()
 
       const { fullPath } = this.$route
 

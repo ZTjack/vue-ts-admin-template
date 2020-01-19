@@ -17,6 +17,7 @@
 
 <script>
 import RightPanel from '@/components/RightPanel'
+import { AppModule } from '@/store/modules/app'
 import { AppMain, Navbar, Settings, Sidebar, TagsView } from './components'
 import ResizeMixin from './mixin/ResizeHandler'
 import { mapState } from 'vuex'
@@ -51,7 +52,7 @@ export default {
   },
   methods: {
     handleClickOutside() {
-      this.$store.dispatch('app/closeSideBar', { withoutAnimation: false })
+      AppModule.closeSideBar({ withoutAnimation: false })
     }
   }
 }

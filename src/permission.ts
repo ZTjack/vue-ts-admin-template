@@ -2,18 +2,18 @@
  * @Author: Jack
  * @Date: 2019-07-24 14:32:25
  * @LastEditors  : Jack
- * @LastEditTime : 2019-12-23 14:13:36
+ * @LastEditTime : 2020-01-19 12:10:12
  * @Description: 权限控制
  * 1. whitelist白名单
  * 2. 这边的token使用的cookie
  */
 import router from './router'
-import store from './store'
 import { Message } from 'element-ui'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
-import { getToken } from '@/utils/auth' // get token from cookie
 import getPageTitle from '@/utils/get-page-title'
+import { UserModule } from '@/store/modules/user'
+import { PermissionModule } from '@/store/modules/permission'
 
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
@@ -27,41 +27,38 @@ router.beforeEach(async(to, from, next) => {
   document.title = getPageTitle(to.meta.title)
 
   // determine whether the user has logged in
-  const hasToken = getToken()
 
-  if (hasToken) {
+  if (UserModule.token) {
     if (to.path === '/login') {
       // if is logged in, redirect to the home page
       next({ path: '/' })
       NProgress.done()
     } else {
-      // determine whether the user has obtained his permission roles through getInfo
-      const hasRoles = store.getters.roles && store.getters.roles.length > 0
-      if (hasRoles) {
-        next()
-      } else {
+      if (UserModule.roles.length === 0) {
         try {
           // get user info
           // note: roles must be a object array! such as: ['admin'] or ,['developer','editor']
-          const { roles } = await store.dispatch('user/getInfo')
-
+          await UserModule.getInfo()
+          const roles = UserModule.roles
           // generate accessible routes map based on roles
-          const accessRoutes = await store.dispatch('permission/generateRoutes', roles)
-
+          PermissionModule.generateRoutes(roles)
           // dynamically add accessible routes
-          router.addRoutes(accessRoutes)
+          router.addRoutes(PermissionModule.addRoutes)
 
           // hack method to ensure that addRoutes is complete
           // set the replace: true, so the navigation will not leave a history record
           next({ ...to, replace: true })
         } catch (error) {
           // remove token and go to login page to re-login
-          await store.dispatch('user/resetToken')
+          await UserModule.resetToken()
           Message.error(error || 'permission Has Error')
           next(`/login?redirect=${to.path}`)
           NProgress.done()
         }
+      } else {
+        next()
       }
+      // determine whether the user has obtained his permission roles through getInfo
     }
   } else {
     /* has no token*/

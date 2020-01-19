@@ -1,7 +1,15 @@
+/*
+ * @Author: Jack
+ * @Date: 2020-01-10 15:40:37
+ * @LastEditors  : Jack
+ * @LastEditTime : 2020-01-19 12:04:01
+ * @Description:
+ */
 import axios from 'axios'
 import { MessageBox, Message } from 'element-ui'
 import store from '@/store'
 import { getToken } from '@/utils/auth'
+import { UserModule } from '@/store/modules/user'
 
 // create an axios instance
 const service = axios.create({
@@ -61,7 +69,7 @@ service.interceptors.response.use(
           cancelButtonText: 'Cancel',
           type: 'warning'
         }).then(() => {
-          store.dispatch('user/resetToken').then(() => {
+          UserModule.resetToken().then(() => {
             location.reload()
           })
         })

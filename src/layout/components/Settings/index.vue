@@ -29,6 +29,7 @@
 
 <script>
 import ThemePicker from '@/components/ThemePicker'
+import { SettingsModule } from '@/store/modules/settings'
 
 export default {
   components: { ThemePicker },
@@ -41,7 +42,7 @@ export default {
         return this.$store.state.settings.fixedHeader
       },
       set(val) {
-        this.$store.dispatch('settings/changeSetting', {
+        SettingsModule.changeSetting({
           key: 'fixedHeader',
           value: val
         })
@@ -52,7 +53,7 @@ export default {
         return this.$store.state.settings.tagsView
       },
       set(val) {
-        this.$store.dispatch('settings/changeSetting', {
+        SettingsModule.changeSetting({
           key: 'tagsView',
           value: val
         })
@@ -63,7 +64,7 @@ export default {
         return this.$store.state.settings.sidebarLogo
       },
       set(val) {
-        this.$store.dispatch('settings/changeSetting', {
+        SettingsModule.changeSetting({
           key: 'sidebarLogo',
           value: val
         })
@@ -72,7 +73,7 @@ export default {
   },
   methods: {
     themeChange(val) {
-      this.$store.dispatch('settings/changeSetting', {
+      SettingsModule.changeSetting({
         key: 'theme',
         value: val
       })

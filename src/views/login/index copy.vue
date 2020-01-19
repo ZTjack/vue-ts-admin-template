@@ -73,120 +73,137 @@
   </div>
 </template>
 
-<script lang="ts">
-
-import { Component, Vue, Watch } from 'vue-property-decorator'
-import { Route } from 'vue-router'
-import { Dictionary } from 'vue-router/types/router'
-import { Form as ElForm, Input } from 'element-ui'
-import { UserModule } from '@/store/modules/user'
-import SocialSign from './components/SocialSignin.vue'
+<script>
 import { validUsername } from '@/utils/validate'
+import SocialSign from './components/SocialSignin'
 
-@Component({
+export default {
   name: 'Login',
-  components: {
-    SocialSign
-  }
-})
-export default class extends Vue {
-private validateUsername = (rule: any, value: string, callback: Function) => {
-  if (!validUsername(value)) {
-    callback(new Error('Please enter the correct user name'))
-  } else {
-    callback()
-  }
-}
-  private validatePassword = (rule: any, value: string, callback: Function) => {
-    if (value.length < 6) {
-      callback(new Error('The password can not be less than 6 digits'))
-    } else {
-      callback()
+  components: { SocialSign },
+  data() {
+    const validateUsername = (rule, value, callback) => {
+      if (!validUsername(value)) {
+        callback(new Error('Please enter the correct user name'))
+      } else {
+        callback()
+      }
     }
-  }
-  private loginForm = {
-    username: 'admin',
-    password: '111111'
-  }
-  private loginRules = {
-    username: [{ validator: this.validateUsername, trigger: 'blur' }],
-    password: [{ validator: this.validatePassword, trigger: 'blur' }]
-  }
-  private passwordType = 'password'
-  private capsTooltip = false
-  private loading = false
-  private showDialog = false
-  private redirect?: string
-  private otherQuery: Dictionary<string> = {}
-
-  @Watch('$route', { immediate: true })
-  private onRouteChange(route: Route) {
-    // TODO: remove the "as Dictionary<string>" hack after v4 release for vue-router
-    // See https://github.com/vuejs/vue-router/pull/2050 for details
-    const query = route.query as Dictionary<string>
-    if (query) {
-      this.redirect = query.redirect
-      this.otherQuery = this.getOtherQuery(query)
+    const validatePassword = (rule, value, callback) => {
+      if (value.length < 6) {
+        callback(new Error('The password can not be less than 6 digits'))
+      } else {
+        callback()
+      }
     }
-  }
-
+    return {
+      loginForm: {
+        username: 'admin',
+        password: '111111'
+      },
+      loginRules: {
+        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
+        password: [{ required: true, trigger: 'blur', validator: validatePassword }]
+      },
+      passwordType: 'password',
+      capsTooltip: false,
+      loading: false,
+      showDialog: false,
+      redirect: undefined,
+      otherQuery: {}
+    }
+  },
+  watch: {
+    $route: {
+      handler: function(route) {
+        const query = route.query
+        if (query) {
+          this.redirect = query.redirect
+          this.otherQuery = this.getOtherQuery(query)
+        }
+      },
+      immediate: true
+    }
+  },
+  created() {
+    // window.addEventListener('storage', this.afterQRScan)
+  },
   mounted() {
     if (this.loginForm.username === '') {
-      (this.$refs.username as Input).focus()
+      this.$refs.username.focus()
     } else if (this.loginForm.password === '') {
-      (this.$refs.password as Input).focus()
+      this.$refs.password.focus()
     }
-  }
-
-  private checkCapslock(event: KeyboardEvent) {
-    const { shiftKey, key } = event
-    if (key && key.length === 1) {
-      if (shiftKey && (key >= 'a' && key <= 'z') || !shiftKey && (key >= 'A' && key <= 'Z')) {
-        this.capsTooltip = true
-      } else {
+  },
+  destroyed() {
+    // window.removeEventListener('storage', this.afterQRScan)
+  },
+  methods: {
+    checkCapslock({ shiftKey, key } = {}) {
+      if (key && key.length === 1) {
+        if (shiftKey && (key >= 'a' && key <= 'z') || !shiftKey && (key >= 'A' && key <= 'Z')) {
+          this.capsTooltip = true
+        } else {
+          this.capsTooltip = false
+        }
+      }
+      if (key === 'CapsLock' && this.capsTooltip === true) {
         this.capsTooltip = false
       }
-    }
-    if (key === 'CapsLock' && this.capsTooltip === true) {
-      this.capsTooltip = false
-    }
-  }
-
-  private showPwd() {
-    if (this.passwordType === 'password') {
-      this.passwordType = ''
-    } else {
-      this.passwordType = 'password'
-    }
-    this.$nextTick(() => {
-      (this.$refs.password as Input).focus()
-    })
-  }
-
-  private handleLogin() {
-    (this.$refs.loginForm as ElForm).validate((valid: boolean) => {
-      if (valid) {
-        this.loading = true
-        UserModule.login(this.loginForm).then(() => {
-          this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
-          this.loading = false
-        }).catch(() => {
-          this.loading = false
-        })
+    },
+    showPwd() {
+      if (this.passwordType === 'password') {
+        this.passwordType = ''
       } else {
-        console.log('error submit!!')
-        return false
+        this.passwordType = 'password'
       }
-    })
-  }
-
-  private getOtherQuery(query: Dictionary<string>) {
-    return Object.keys(query).reduce((acc, cur) => {
-      if (cur !== 'redirect') {
-        acc[cur] = query[cur]
-      }
-      return acc
-    }, {} as Dictionary<string>)
+      this.$nextTick(() => {
+        this.$refs.password.focus()
+      })
+    },
+    handleLogin() {
+      this.$refs.loginForm.validate(valid => {
+        if (valid) {
+          this.loading = true
+          this.$store.dispatch('user/login', this.loginForm)
+            .then(() => {
+              this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
+              this.loading = false
+            })
+            .catch(() => {
+              this.loading = false
+            })
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
+    },
+    getOtherQuery(query) {
+      return Object.keys(query).reduce((acc, cur) => {
+        if (cur !== 'redirect') {
+          acc[cur] = query[cur]
+        }
+        return acc
+      }, {})
+    }
+    // afterQRScan() {
+    //   if (e.key === 'x-admin-oauth-code') {
+    //     const code = getQueryObject(e.newValue)
+    //     const codeMap = {
+    //       wechat: 'code',
+    //       tencent: 'code'
+    //     }
+    //     const type = codeMap[this.auth_type]
+    //     const codeName = code[type]
+    //     if (codeName) {
+    //       this.$store.dispatch('LoginByThirdparty', codeName).then(() => {
+    //         this.$router.push({ path: this.redirect || '/' })
+    //       })
+    //     } else {
+    //       alert('第三方登录失败')
+    //     }
+    //   }
+    // }
   }
 }
 </script>

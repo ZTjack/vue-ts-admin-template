@@ -1,4 +1,12 @@
+/*
+ * @Author: Jack
+ * @Date: 2020-01-10 15:40:37
+ * @LastEditors  : Jack
+ * @LastEditTime : 2020-01-19 11:25:20
+ * @Description:
+ */
 import store from '@/store'
+import { AppModule, DeviceType } from '@/store/modules/app'
 
 const { body } = document
 const WIDTH = 992 // refer to Bootstrap's responsive design
@@ -7,7 +15,7 @@ export default {
   watch: {
     $route(route) {
       if (this.device === 'mobile' && this.sidebar.opened) {
-        store.dispatch('app/closeSideBar', { withoutAnimation: false })
+        AppModule.closeSideBar({ withoutAnimation: false })
       }
     }
   },
@@ -20,8 +28,8 @@ export default {
   mounted() {
     const isMobile = this.$_isMobile()
     if (isMobile) {
-      store.dispatch('app/toggleDevice', 'mobile')
-      store.dispatch('app/closeSideBar', { withoutAnimation: true })
+      AppModule.toggleDevice(DeviceType.Mobile)
+      AppModule.closeSideBar({ withoutAnimation: true })
     }
   },
   methods: {
@@ -34,10 +42,10 @@ export default {
     $_resizeHandler() {
       if (!document.hidden) {
         const isMobile = this.$_isMobile()
-        store.dispatch('app/toggleDevice', isMobile ? 'mobile' : 'desktop')
+        AppModule.toggleDevice(isMobile ? DeviceType.Mobile : DeviceType.Desktop)
 
         if (isMobile) {
-          store.dispatch('app/closeSideBar', { withoutAnimation: true })
+          AppModule.closeSideBar({ withoutAnimation: true })
         }
       }
     }

@@ -1,3 +1,10 @@
+/*
+ * @Author: Jack
+ * @Date: 2020-01-10 15:40:37
+ * @LastEditors: Jack
+ * @LastEditTime: 2020-01-16 18:17:36
+ * @Description:
+ */
 import Cookies from 'js-cookie'
 
 const TokenKey = 'Admin-Token'

@@ -1,3 +1,10 @@
+/*
+ * @Author: Jack
+ * @Date: 2020-01-10 15:40:37
+ * @LastEditors: Jack
+ * @LastEditTime: 2020-01-17 16:59:48
+ * @Description:
+ */
 const getters = {
   sidebar: state => state.app.sidebar,
   size: state => state.app.size,

@@ -1,3 +1,10 @@
+<!--
+ * @Author: Jack
+ * @Date: 2020-01-10 15:40:37
+ * @LastEditors: Jack
+ * @LastEditTime: 2020-01-19 11:31:34
+ * @Description:
+ -->
 <template>
   <div>
     <div style="margin-bottom:15px;">
@@ -12,6 +19,7 @@
 </template>
 
 <script>
+import { UserModule } from '@/store/modules/user'
 export default {
   computed: {
     roles() {
@@ -22,7 +30,7 @@ export default {
         return this.roles[0]
       },
       set(val) {
-        this.$store.dispatch('user/changeRoles', val).then(() => {
+        UserModule.changeRoles(val).then(() => {
           this.$emit('change')
         })
       }

@@ -47,6 +47,8 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { AppModule } from '@/store/modules/app'
+import { UserModule } from '@/store/modules/user'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
 import ErrorLog from '@/components/ErrorLog'
@@ -72,10 +74,10 @@ export default {
   },
   methods: {
     toggleSideBar() {
-      this.$store.dispatch('app/toggleSideBar')
+      AppModule.toggleSideBar()
     },
     async logout() {
-      await this.$store.dispatch('user/logout')
+      await UserModule.logout()
       this.$router.push(`/login?redirect=${this.$route.fullPath}`)
     }
   }

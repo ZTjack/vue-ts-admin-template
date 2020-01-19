@@ -1,3 +1,4 @@
+
 <template>
   <div v-if="errorLogs.length>0">
     <el-badge :is-dot="true" style="line-height: 25px;margin-top: -5px;" @click.native="dialogTableVisible=true">
@@ -47,6 +48,8 @@
 </template>
 
 <script>
+import { ErrorLogModule } from '@/store/modules/errorLog'
+
 export default {
   name: 'ErrorLog',
   data() {
@@ -62,7 +65,7 @@ export default {
   methods: {
     clearAll() {
       this.dialogTableVisible = false
-      this.$store.dispatch('errorLog/clearErrorLog')
+      ErrorLogModule.clearErrorLog()
     }
   }
 }
