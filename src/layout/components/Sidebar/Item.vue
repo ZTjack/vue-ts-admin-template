@@ -1,4 +1,6 @@
 <script>
+
+// TODO: will be update to ts
 export default {
   name: 'MenuItem',
   functional: true,

@@ -2,24 +2,21 @@
  * @Author: Jack
  * @Date: 2020-01-10 15:40:37
  * @LastEditors  : Jack
- * @LastEditTime : 2020-01-19 14:52:37
+ * @LastEditTime : 2020-02-03 16:24:16
  * @Description:
  */
 import Vue from 'vue'
 import { ErrorLogModule } from '@/store/modules/errorLog'
-import { isString, isArray } from '@/utils/validate'
+import { isArray } from '@/utils/validate'
 import settings from '@/settings'
 
 // you can set in settings.js
-// errorLog:'production' | ['production', 'development']
+// errorLog: ['production', 'development']
 const { errorLog: needErrorLog } = settings
 
 function checkNeed() {
   const env = process.env.NODE_ENV
-  if (isArray(needErrorLog)) {
-    return needErrorLog.includes(env)
-  }
-  return false
+  return env && needErrorLog.includes(env)
 }
 
 if (checkNeed()) {

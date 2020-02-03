@@ -2,7 +2,7 @@
  * @Author: Jack
  * @Date: 2020-01-16 16:39:05
  * @LastEditors  : Jack
- * @LastEditTime : 2020-01-16 16:43:59
+ * @LastEditTime : 2020-02-03 16:59:25
  * @Description:
  */
 import { VuexModule, Module, Mutation, Action, getModule } from 'vuex-module-decorators'
@@ -35,7 +35,7 @@ class Settings extends VuexModule implements ISettingsState {
   }
 
   @Action
-  public ChangeSetting(payload: { key: string, value: any}) {
+  public changeSetting(payload: { key: string, value: any}) {
     this.CHANGE_SETTING(payload)
   }
 }

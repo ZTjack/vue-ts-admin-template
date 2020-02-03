@@ -27,57 +27,57 @@
   </div>
 </template>
 
-<script>
-import ThemePicker from '@/components/ThemePicker'
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator'
 import { SettingsModule } from '@/store/modules/settings'
+import ThemePicker from '@/components/ThemePicker/index.vue'
 
-export default {
-  components: { ThemePicker },
-  data() {
-    return {}
-  },
-  computed: {
-    fixedHeader: {
-      get() {
-        return this.$store.state.settings.fixedHeader
-      },
-      set(val) {
-        SettingsModule.changeSetting({
-          key: 'fixedHeader',
-          value: val
-        })
-      }
-    },
-    tagsView: {
-      get() {
-        return this.$store.state.settings.tagsView
-      },
-      set(val) {
-        SettingsModule.changeSetting({
-          key: 'tagsView',
-          value: val
-        })
-      }
-    },
-    sidebarLogo: {
-      get() {
-        return this.$store.state.settings.sidebarLogo
-      },
-      set(val) {
-        SettingsModule.changeSetting({
-          key: 'sidebarLogo',
-          value: val
-        })
-      }
-    }
-  },
-  methods: {
-    themeChange(val) {
-      SettingsModule.changeSetting({
-        key: 'theme',
-        value: val
-      })
-    }
+@Component({
+  name: 'Settings',
+  components: {
+    ThemePicker
+  }
+})
+
+export default class extends Vue {
+  get fixedHeader() {
+    return SettingsModule.fixedHeader
+  }
+
+  set fixedHeader(val) {
+    SettingsModule.changeSetting({
+      key: 'fixedHeader',
+      value: val
+    })
+  }
+
+  get tagsView() {
+    return SettingsModule.tagsView
+  }
+
+  set tagsView(val) {
+    SettingsModule.changeSetting({
+      key: 'tagsView',
+      value: val
+    })
+  }
+
+  get sidebarLogo() {
+    return SettingsModule.sidebarLogo
+  }
+
+  set sidebarLogo(val) {
+    SettingsModule.changeSetting({
+      key: 'sidebarLogo',
+      value: val
+    })
+  }
+
+  private themeChange(val: string) {
+    SettingsModule.changeSetting({
+      key: 'theme',
+      value: val
+    })
   }
 }
 </script>
