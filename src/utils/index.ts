@@ -49,7 +49,7 @@ export function parseTime(time: Date | string | number, cFormat?: string) {
  * @param {string} option
  * @returns {string}
  */
-export function formatTime(time:number, option:string) {
+export function formatTime(time:number, option?:string) {
   if (('' + time).length === 10) {
     time = time * 1000
   } else {

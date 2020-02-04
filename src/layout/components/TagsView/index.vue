@@ -116,7 +116,6 @@ export default class extends Vue {
 
   private addTags() {
     const { name } = this.$route
-    console.log('name', name)
     if (name) {
       TagsViewModule.addView(this.$route)
     }
