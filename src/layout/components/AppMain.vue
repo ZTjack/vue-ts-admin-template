@@ -1,3 +1,10 @@
+<!--
+ * @Author: Jack
+ * @Date: 2020-01-10 15:40:37
+ * @LastEditors  : Jack
+ * @LastEditTime : 2020-02-04 12:08:25
+ * @Description:
+ -->
 <template>
   <section class="app-main">
     <transition name="fade-transform" mode="out-in">
@@ -8,16 +15,20 @@
   </section>
 </template>
 
-<script>
-export default {
-  name: 'AppMain',
-  computed: {
-    cachedViews() {
-      return this.$store.state.tagsView.cachedViews
-    },
-    key() {
-      return this.$route.path
-    }
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator'
+import { TagsViewModule } from '@/store/modules/tagsView'
+
+@Component({
+  name: 'AppMain'
+})
+
+export default class extends Vue {
+  get cachedViews() {
+    return TagsViewModule.cachedViews
+  }
+  get key() {
+    return this.$route.path
   }
 }
 </script>

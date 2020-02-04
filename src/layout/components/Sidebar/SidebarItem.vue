@@ -2,7 +2,7 @@
  * @Author: Jack
  * @Date: 2020-01-10 15:40:37
  * @LastEditors  : Jack
- * @LastEditTime : 2020-02-03 18:00:49
+ * @LastEditTime : 2020-02-03 18:26:44
  * @Description:
  -->
 
@@ -59,7 +59,7 @@ export default class extends Vue {
   }
 
   private hasOneShowingChild(parent:any, children = []) {
-    const showingChildren = children.filter(item => {
+    const showingChildren = children.filter((item:any) => {
       if (item.meta && item.meta.hidden) {
         return false
       } else {

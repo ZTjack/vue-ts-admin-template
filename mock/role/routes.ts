@@ -46,18 +46,6 @@ export const constantRoutes = [
     ]
   },
   {
-    path: '/documentation',
-    component: 'layout/Layout',
-    children: [
-      {
-        path: 'index',
-        component: 'views/documentation/index',
-        name: 'Documentation',
-        meta: { title: 'Documentation', icon: 'documentation', affix: true }
-      }
-    ]
-  },
-  {
     path: '/guide',
     component: 'layout/Layout',
     redirect: '/guide/index',

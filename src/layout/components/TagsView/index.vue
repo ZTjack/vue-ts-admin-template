@@ -25,173 +25,193 @@
   </div>
 </template>
 
-<script>
-import ScrollPane from './ScrollPane'
+<script lang="ts">
+import ScrollPane from './ScrollPane.vue'
 import path from 'path'
-import { TagsViewModule } from '@/store/modules/tagsView'
+import { TagsViewModule, ITagView } from '@/store/modules/tagsView'
+import VueRouter, { Route, RouteRecord, RouteConfig } from 'vue-router'
+import { PermissionModule } from '@/store/modules/permission'
+import { Component, Vue, Watch } from 'vue-property-decorator'
 
-export default {
-  components: { ScrollPane },
-  data() {
-    return {
-      visible: false,
-      top: 0,
-      left: 0,
-      selectedTag: {},
-      affixTags: []
+@Component({
+  name: 'TagsView',
+  components: {
+    ScrollPane
+  }
+})
+
+export default class extends Vue {
+  private visible:boolean = false
+  private top:number = 0
+  private left:number = 0
+  private selectedTag:ITagView = {}
+  private affixTags:ITagView[] = []
+
+  get visitedViews() {
+    return TagsViewModule.visitedViews
+  }
+
+  get routes() {
+    return PermissionModule.routes
+  }
+
+  @Watch('$route')
+  private onRouteChange() {
+    this.addTags()
+    this.moveToCurrentTag()
+  }
+
+  @Watch('visible')
+  private onVisibleChange(value: boolean) {
+    if (value) {
+      document.body.addEventListener('click', this.closeMenu)
+    } else {
+      document.body.removeEventListener('click', this.closeMenu)
     }
-  },
-  computed: {
-    visitedViews() {
-      return this.$store.state.tagsView.visitedViews
-    },
-    routes() {
-      return this.$store.state.permission.routes
-    }
-  },
-  watch: {
-    $route() {
-      this.addTags()
-      this.moveToCurrentTag()
-    },
-    visible(value) {
-      if (value) {
-        document.body.addEventListener('click', this.closeMenu)
-      } else {
-        document.body.removeEventListener('click', this.closeMenu)
-      }
-    }
-  },
+  }
+
   mounted() {
     this.initTags()
     this.addTags()
-  },
-  methods: {
-    isActive(route) {
-      return route.path === this.$route.path
-    },
-    isAffix(tag) {
-      return tag.meta && tag.meta.affix
-    },
-    filterAffixTags(routes, basePath = '/') {
-      let tags = []
-      routes.forEach(route => {
-        if (route.meta && route.meta.affix) {
-          const tagPath = path.resolve(basePath, route.path)
-          tags.push({
-            fullPath: tagPath,
-            path: tagPath,
-            name: route.name,
-            meta: { ...route.meta }
-          })
-        }
-        if (route.children) {
-          const tempTags = this.filterAffixTags(route.children, route.path)
-          if (tempTags.length >= 1) {
-            tags = [...tags, ...tempTags]
-          }
-        }
-      })
-      return tags
-    },
-    initTags() {
-      const affixTags = this.affixTags = this.filterAffixTags(this.routes)
-      for (const tag of affixTags) {
-        if (tag.name) {
-          TagsViewModule.addVisitedView(tag)
-        }
-      }
-    },
-    addTags() {
-      const { name } = this.$route
-      if (name) {
-        TagsViewModule.addView(this.$route)
-      }
-      return false
-    },
-    moveToCurrentTag() {
-      const tags = this.$refs.tag
-      this.$nextTick(() => {
-        for (const tag of tags) {
-          if (tag.to.path === this.$route.path) {
-            this.$refs.scrollPane.moveToTarget(tag)
-            // when query is different then update
-            if (tag.to.fullPath !== this.$route.fullPath) {
-              TagsViewModule.updateVisitedView(this.$route)
-            }
-            break
-          }
-        }
-      })
-    },
-    refreshSelectedTag(view) {
-      TagsViewModule.delCachedView(view).then(() => {
-        const { fullPath } = view
-        this.$nextTick(() => {
-          this.$router.replace({
-            path: '/redirect' + fullPath
-          })
+  }
+
+  private isActive(route: ITagView) {
+    return route.path === this.$route.path
+  }
+
+  private isAffix(tag: ITagView) {
+    return tag.meta && tag.meta.affix
+  }
+
+  private filterAffixTags(routes: RouteConfig[], basePath = '/') {
+    let tags: ITagView[] = []
+    routes.forEach(route => {
+      if (route.meta && route.meta.affix) {
+        const tagPath = path.resolve(basePath, route.path)
+        tags.push({
+          fullPath: tagPath,
+          path: tagPath,
+          name: route.name,
+          meta: { ...route.meta }
         })
-      })
-    },
-    closeSelectedTag(view) {
-      TagsViewModule.delView(view).then(({ visitedViews }) => {
-        if (this.isActive(view)) {
-          this.toLastView(visitedViews, view)
-        }
-      })
-    },
-    closeOthersTags() {
-      this.$router.push(this.selectedTag)
-      TagsViewModule.delOthersViews(this.selectedTag).then(() => {
-        this.moveToCurrentTag()
-      })
-    },
-    closeAllTags(view) {
-      TagsViewModule.delAllViews().then(({ visitedViews }) => {
-        if (this.affixTags.some(tag => tag.path === view.path)) {
-          return
-        }
-        this.toLastView(visitedViews, view)
-      })
-    },
-    toLastView(visitedViews, view) {
-      const latestView = visitedViews.slice(-1)[0]
-      if (latestView) {
-        this.$router.push(latestView.fullPath)
-      } else {
-        // now the default is to redirect to the home page if there is no tags-view,
-        // you can adjust it according to your needs.
-        if (view.name === 'Dashboard') {
-          // to reload home page
-          this.$router.replace({ path: '/redirect' + view.fullPath })
-        } else {
-          this.$router.push('/')
+      }
+      if (route.children) {
+        const tempTags = this.filterAffixTags(route.children, route.path)
+        if (tempTags.length >= 1) {
+          tags = [...tags, ...tempTags]
         }
       }
-    },
-    openMenu(tag, e) {
-      const menuMinWidth = 105
-      const offsetLeft = this.$el.getBoundingClientRect().left // container margin left
-      const offsetWidth = this.$el.offsetWidth // container width
-      const maxLeft = offsetWidth - menuMinWidth // left boundary
-      const left = e.clientX - offsetLeft + 15 // 15: margin right
+    })
+    return tags
+  }
 
-      if (left > maxLeft) {
-        this.left = maxLeft
-      } else {
-        this.left = left
+  private initTags() {
+    const affixTags = this.affixTags = this.filterAffixTags(this.routes)
+    for (const tag of affixTags) {
+      if (tag.name) {
+        TagsViewModule.addVisitedView(tag)
       }
-
-      this.top = e.clientY
-      this.visible = true
-      this.selectedTag = tag
-    },
-    closeMenu() {
-      this.visible = false
     }
   }
+
+  private addTags() {
+    const { name } = this.$route
+    console.log('name', name)
+    if (name) {
+      TagsViewModule.addView(this.$route)
+    }
+    return false
+  }
+
+  private moveToCurrentTag() {
+    // TODO: better typescript support for router-link
+    const tags = this.$refs.tag as any[]
+    this.$nextTick(() => {
+      for (const tag of tags) {
+        if ((tag.to as ITagView).path === this.$route.path) {
+          (this.$refs.scrollPane as any).moveToTarget(tag as any)
+          // when query is different then update
+          if (tag.to.fullPath !== this.$route.fullPath) {
+            TagsViewModule.updateVisitedView(this.$route)
+          }
+          break
+        }
+      }
+    })
+  }
+
+  private refreshSelectedTag(view: ITagView) {
+    TagsViewModule.delCachedView(view).then(() => {
+      const { fullPath } = view
+      this.$nextTick(() => {
+        this.$router.replace({
+          path: '/redirect' + fullPath
+        })
+      })
+    })
+  }
+
+  private closeSelectedTag(view:ITagView) {
+    TagsViewModule.delView(view)
+    if (this.isActive(view)) {
+      this.toLastView(TagsViewModule.visitedViews, view)
+    }
+  }
+
+  private closeOthersTags() {
+    this.$router.push(this.selectedTag)
+    TagsViewModule.delOthersViews(this.selectedTag).then(() => {
+      this.moveToCurrentTag()
+    })
+  }
+
+  private closeAllTags(view:ITagView) {
+    TagsViewModule.delAllViews()
+    if (this.affixTags.some(tag => tag.path === view.path)) {
+      return
+    }
+    this.toLastView(TagsViewModule.visitedViews, view)
+  }
+
+  private toLastView(visitedViews:ITagView[], view:ITagView) {
+    const latestView = visitedViews.slice(-1)[0]
+    if (latestView) {
+      this.$router.push(latestView)
+    } else {
+      // now the default is to redirect to the home page if there is no tags-view,
+      // you can adjust it according to your needs.
+      if (view.name === 'Dashboard') {
+        // to reload home page
+        this.$router.replace({ path: '/redirect' + view.fullPath })
+      } else {
+        this.$router.push('/')
+      }
+    }
+  }
+
+  private openMenu(tag:ITagView, e: MouseEvent) {
+    const menuMinWidth = 105
+    const offsetLeft = this.$el.getBoundingClientRect().left // container margin left
+    const offsetWidth = (this.$el as HTMLElement).offsetWidth // container width
+    const maxLeft = offsetWidth - menuMinWidth // left boundary
+    const left = e.clientX - offsetLeft + 15 // 15: margin right
+
+    if (left > maxLeft) {
+      this.left = maxLeft
+    } else {
+      this.left = left
+    }
+
+    this.top = e.clientY
+    this.visible = true
+    this.selectedTag = tag
+  }
+
+  private closeMenu() {
+    this.visible = false
+  }
 }
+
 </script>
 
 <style lang="scss" scoped>

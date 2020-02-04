@@ -2,7 +2,7 @@
  * @Author: Jack
  * @Date: 2020-01-10 15:40:37
  * @LastEditors  : Jack
- * @LastEditTime : 2020-01-19 13:58:06
+ * @LastEditTime : 2020-02-04 12:28:43
  * @Description:
  -->
 <template>
@@ -19,7 +19,7 @@
         :collapse-transition="false"
         mode="vertical"
       >
-        <sidebar-item v-for="route in permission_routes" :key="route.path" :item="route" :base-path="route.path" />
+        <sidebar-item v-for="route in permissionRoutes" :key="route.path" :item="route" :base-path="route.path" />
       </el-menu>
     </el-scrollbar>
   </div>
@@ -43,7 +43,7 @@ import variables from '@/styles/variables.scss'
   }
 })
 export default class extends Vue {
-  get permission_routes() {
+  get permissionRoutes() {
     return PermissionModule.routes
   }
 
