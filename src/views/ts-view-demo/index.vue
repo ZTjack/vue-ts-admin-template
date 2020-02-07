@@ -2,7 +2,7 @@
  * @Author: Jack
  * @Date: 2020-01-13 14:28:36
  * @LastEditors  : Jack
- * @LastEditTime : 2020-01-13 17:05:10
+ * @LastEditTime : 2020-02-07 13:37:25
  * @Description:
  -->
 <template>
@@ -62,11 +62,12 @@ export default class extends Vue {
 
   mounted() {
     console.log('mounted')
+    this.onStrChange('ccccccc')
   }
 
   // 第二个参数可以不填写
   @Watch('str', { immediate: true, deep: true })
-  private onWatchStrChange(value: string) {
+  private onStrChange(value: string) {
     console.log('watch changed to ' + value)
   }
 }
