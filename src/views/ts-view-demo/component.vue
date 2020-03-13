@@ -25,19 +25,19 @@ import { Component, Prop, Vue } from 'vue-property-decorator'
 @Component({
   name: 'TestComponent'
 })
-
 export default class extends Vue {
   // 这里前面的type字段建议还是要写，写了在build的时候TS才会检查
   @Prop(String) private msg!: string
   @Prop({ type: String, default: 'test', required: true }) testStr!: string
   // 或者的关系
-  @Prop([String, Number]) strOrNum !: string | number
+  @Prop([String, Number]) strOrNum!: string | number
   @Prop({
     type: Array,
     // 假如是Object或者数组类型，默认值需要通过工厂函数返回
     default: () => {
       return ['a', 'b']
     }
-  }) testArray!: string[]
+  })
+  testArray!: string[]
 }
 </script>

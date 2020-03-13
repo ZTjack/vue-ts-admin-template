@@ -1,11 +1,10 @@
-
 const vueSticky = {}
 // @ts-ignore
 let listenAction
 // @ts-ignore
-vueSticky.install = (Vue:any) => {
+vueSticky.install = (Vue: any) => {
   Vue.directive('sticky', {
-    inserted(el:any, binding:any) {
+    inserted(el: any, binding: any) {
       const params = binding.value || {}
       const stickyTop = params.stickyTop || 0
       const zIndex = params.zIndex || 1000
@@ -32,7 +31,7 @@ vueSticky.install = (Vue:any) => {
 
       let active = false
 
-      const getScroll = (target:any, top:any) => {
+      const getScroll = (target: any, top: any) => {
         const prop = top ? 'pageYOffset' : 'pageXOffset'
         const method = top ? 'scrollTop' : 'scrollLeft'
         let ret = target[prop]
@@ -91,4 +90,3 @@ vueSticky.install = (Vue:any) => {
 }
 
 export default vueSticky
-

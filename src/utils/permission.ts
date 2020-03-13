@@ -12,7 +12,7 @@ import { UserModule } from '@/store/modules/user'
  * @returns {Boolean}
  * @example see @/views/permission/directive.vue
  */
-export default function checkPermission(value:string[]) {
+export default function checkPermission(value: string[]) {
   if (value && value instanceof Array && value.length > 0) {
     const roles = UserModule.roles
     const permissionRoles = value

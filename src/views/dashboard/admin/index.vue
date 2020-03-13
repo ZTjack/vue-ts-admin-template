@@ -10,7 +10,6 @@
     <github-corner class="github-corner" />
 
     <h1>Welcome to Admin Dashboard</h1>
-
   </div>
 </template>
 
@@ -25,9 +24,7 @@ import GithubCorner from '@/components/GithubCorner/index.vue'
     GithubCorner
   }
 })
-export default class extends Vue {
-
-}
+export default class extends Vue {}
 </script>
 
 <style lang="scss" scoped>
@@ -50,7 +47,7 @@ export default class extends Vue {
   }
 }
 
-@media (max-width:1024px) {
+@media (max-width: 1024px) {
   .chart-wrapper {
     padding: 8px;
   }

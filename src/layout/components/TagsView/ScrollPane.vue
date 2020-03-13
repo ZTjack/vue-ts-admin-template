@@ -6,7 +6,12 @@
  * @Description:
  -->
 <template>
-  <el-scrollbar ref="scrollContainer" :vertical="false" class="scroll-container" @wheel.native.prevent="handleScroll">
+  <el-scrollbar
+    ref="scrollContainer"
+    :vertical="false"
+    class="scroll-container"
+    @wheel.native.prevent="handleScroll"
+  >
     <slot />
   </el-scrollbar>
 </template>
@@ -17,16 +22,15 @@ import { Component, Vue } from 'vue-property-decorator'
 @Component({
   name: 'ScrollPane'
 })
-
 export default class extends Vue {
   private left: number = 0
-  private tagAndTagSpacing:number = 4
+  private tagAndTagSpacing: number = 4
 
   get scrollWrapper() {
     return (this.$refs.scrollContainer as any).$refs.wrap
   }
 
-  private handleScroll(e:MouseWheelEvent) {
+  private handleScroll(e: MouseWheelEvent) {
     const eventDelta = (e as any).wheelDelta || -e.deltaY * 40
     const $scrollWrapper = this.scrollWrapper
     $scrollWrapper.scrollLeft = $scrollWrapper.scrollLeft + eventDelta / 4
@@ -58,12 +62,17 @@ export default class extends Vue {
       const nextTag = tagList[currentIndex + 1]
 
       // the tag's offsetLeft after of nextTag
-      const afterNextTagOffsetLeft = nextTag.$el.offsetLeft + nextTag.$el.offsetWidth + this.tagAndTagSpacing
+      const afterNextTagOffsetLeft =
+        nextTag.$el.offsetLeft + nextTag.$el.offsetWidth + this.tagAndTagSpacing
 
       // the tag's offsetLeft before of prevTag
-      const beforePrevTagOffsetLeft = prevTag.$el.offsetLeft - this.tagAndTagSpacing
+      const beforePrevTagOffsetLeft =
+        prevTag.$el.offsetLeft - this.tagAndTagSpacing
 
-      if (afterNextTagOffsetLeft > $scrollWrapper.scrollLeft + $containerWidth) {
+      if (
+        afterNextTagOffsetLeft >
+        $scrollWrapper.scrollLeft + $containerWidth
+      ) {
         $scrollWrapper.scrollLeft = afterNextTagOffsetLeft - $containerWidth
       } else if (beforePrevTagOffsetLeft < $scrollWrapper.scrollLeft) {
         $scrollWrapper.scrollLeft = beforePrevTagOffsetLeft
@@ -71,7 +80,6 @@ export default class extends Vue {
     }
   }
 }
-
 </script>
 
 <style lang="scss" scoped>

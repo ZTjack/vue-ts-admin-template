@@ -1,5 +1,10 @@
-
-import { VuexModule, Module, Mutation, Action, getModule } from 'vuex-module-decorators'
+import {
+  VuexModule,
+  Module,
+  Mutation,
+  Action,
+  getModule
+} from 'vuex-module-decorators'
 import store from '@/store'
 
 interface IErrorLog {
@@ -14,7 +19,6 @@ export interface IErrorLogState {
 }
 
 @Module({ dynamic: true, store, name: 'errorLog' })
-
 class ErrorLog extends VuexModule implements IErrorLogState {
   public logs: IErrorLog[] = []
 
@@ -40,4 +44,3 @@ class ErrorLog extends VuexModule implements IErrorLogState {
 }
 
 export const ErrorLogModule = getModule(ErrorLog)
-

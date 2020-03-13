@@ -2,11 +2,11 @@
  * @Author: Jack
  * @Date: 2020-01-10 15:40:37
  * @LastEditors: Jack
- * @LastEditTime: 2020-01-16 12:11:14
+ * @LastEditTime: 2020-03-13 17:18:48
  * @Description:
  */
 export default {
-  bind(el:any, binding:any, vNode:any) {
+  bind(el: any, binding: any, vNode: any) {
     const dialogHeaderEl = el.querySelector('.el-dialog__header')
     const dragDom = el.querySelector('.el-dialog')
     dialogHeaderEl.style.cssText += ';cursor:move;'
@@ -16,13 +16,13 @@ export default {
     const getStyle = (function() {
       // @ts-ignore
       if (window.document.currentStyle) {
-        return (dom:any, attr:any) => dom.currentStyle[attr]
+        return (dom: any, attr: any) => dom.currentStyle[attr]
       } else {
-        return (dom:any, attr:any) => getComputedStyle(dom, null)[attr]
+        return (dom: any, attr: any) => getComputedStyle(dom, null)[attr]
       }
     })()
 
-    dialogHeaderEl.onmousedown = (e:any) => {
+    dialogHeaderEl.onmousedown = (e: any) => {
       // 鼠标按下，计算当前元素距离可视区的距离
       const disX = e.clientX - dialogHeaderEl.offsetLeft
       const disY = e.clientY - dialogHeaderEl.offsetTop
@@ -44,7 +44,9 @@ export default {
       let styT = getStyle(dragDom, 'top')
 
       if (styL.includes('%')) {
+        // eslint-disable-next-line no-useless-escape
         styL = +document.body.clientWidth * (+styL.replace(/\%/g, '') / 100)
+        // eslint-disable-next-line no-useless-escape
         styT = +document.body.clientHeight * (+styT.replace(/\%/g, '') / 100)
       } else {
         styL = +styL.replace(/\px/g, '')
@@ -57,13 +59,13 @@ export default {
         let top = e.clientY - disY
 
         // 边界处理
-        if (-(left) > minDragDomLeft) {
+        if (-left > minDragDomLeft) {
           left = -minDragDomLeft
         } else if (left > maxDragDomLeft) {
           left = maxDragDomLeft
         }
 
-        if (-(top) > minDragDomTop) {
+        if (-top > minDragDomTop) {
           top = -minDragDomTop
         } else if (top > maxDragDomTop) {
           top = maxDragDomTop

@@ -7,7 +7,7 @@
  */
 import adaptive from './adaptive'
 
-const install = function(Vue:any) {
+const install = function(Vue: any) {
   Vue.directive('el-height-adaptive-table', adaptive)
 }
 

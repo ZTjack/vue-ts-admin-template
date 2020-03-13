@@ -1,6 +1,8 @@
 <template>
   <div class="app-container">
-    <el-button type="primary" @click="handleAddRole">New Role</el-button>
+    <el-button type="primary" @click="handleAddRole">
+      New Role
+    </el-button>
 
     <el-table :data="rolesList" style="width: 100%;margin-top:30px;" border>
       <el-table-column align="center" label="Role Key" width="220">
@@ -20,13 +22,20 @@
       </el-table-column>
       <el-table-column align="center" label="Operations">
         <template slot-scope="scope">
-          <el-button type="primary" size="small" @click="handleEdit(scope)">Edit</el-button>
-          <el-button type="danger" size="small" @click="handleDelete(scope)">Delete</el-button>
+          <el-button type="primary" size="small" @click="handleEdit(scope)">
+            Edit
+          </el-button>
+          <el-button type="danger" size="small" @click="handleDelete(scope)">
+            Delete
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
 
-    <el-dialog :visible.sync="dialogVisible" :title="dialogType==='edit'?'Edit Role':'New Role'">
+    <el-dialog
+      :visible.sync="dialogVisible"
+      :title="dialogType === 'edit' ? 'Edit Role' : 'New Role'"
+    >
       <el-form :model="role" label-width="80px" label-position="left">
         <el-form-item label="Name">
           <el-input v-model="role.name" placeholder="Role Name" />
@@ -34,7 +43,7 @@
         <el-form-item label="Desc">
           <el-input
             v-model="role.description"
-            :autosize="{ minRows: 2, maxRows: 4}"
+            :autosize="{ minRows: 2, maxRows: 4 }"
             type="textarea"
             placeholder="Role Description"
           />
@@ -52,8 +61,12 @@
         </el-form-item>
       </el-form>
       <div style="text-align:right;">
-        <el-button type="danger" @click="dialogVisible=false">Cancel</el-button>
-        <el-button type="primary" @click="confirmRole">Confirm</el-button>
+        <el-button type="danger" @click="dialogVisible = false">
+          Cancel
+        </el-button>
+        <el-button type="primary" @click="confirmRole">
+          Confirm
+        </el-button>
       </div>
     </el-dialog>
   </div>
@@ -62,7 +75,13 @@
 <script>
 import path from 'path'
 import { deepClone } from '@/utils'
-import { getRoutes, getRoles, addRole, deleteRole, updateRole } from '@/api/role.ts'
+import {
+  getRoutes,
+  getRoles,
+  addRole,
+  deleteRole,
+  updateRole
+} from '@/api/role.ts'
 
 const defaultRole = {
   key: '',
@@ -113,18 +132,26 @@ export default {
 
       for (let route of routes) {
         // skip some route
-        if (route.meta && route.meta.hidden) { continue }
+        if (route.meta && route.meta.hidden) {
+          continue
+        }
 
-        const onlyOneShowingChild = this.onlyOneShowingChild(route.children, route)
+        const onlyOneShowingChild = this.onlyOneShowingChild(
+          route.children,
+          route
+        )
 
-        if (route.children && onlyOneShowingChild && !(route.meta && route.meta.alwaysShow)) {
+        if (
+          route.children &&
+          onlyOneShowingChild &&
+          !(route.meta && route.meta.alwaysShow)
+        ) {
           route = onlyOneShowingChild
         }
 
         const data = {
           path: path.resolve(basePath, route.path),
           title: route.meta && route.meta.title
-
         }
 
         // recursive child routes
@@ -174,7 +201,7 @@ export default {
         cancelButtonText: 'Cancel',
         type: 'warning'
       })
-        .then(async() => {
+        .then(async () => {
           await deleteRole(row.key)
           this.rolesList.splice($index, 1)
           this.$message({
@@ -182,7 +209,9 @@ export default {
             message: 'Delete succed!'
           })
         })
-        .catch(err => { console.error(err) })
+        .catch(err => {
+          console.error(err)
+        })
     },
     generateTree(routes, basePath = '/', checkedKeys) {
       const res = []
@@ -192,10 +221,17 @@ export default {
 
         // recursive child routes
         if (route.children) {
-          route.children = this.generateTree(route.children, routePath, checkedKeys)
+          route.children = this.generateTree(
+            route.children,
+            routePath,
+            checkedKeys
+          )
         }
 
-        if (checkedKeys.includes(routePath) || (route.children && route.children.length >= 1)) {
+        if (
+          checkedKeys.includes(routePath) ||
+          (route.children && route.children.length >= 1)
+        ) {
           res.push(route)
         }
       }
@@ -205,7 +241,11 @@ export default {
       const isEdit = this.dialogType === 'edit'
 
       const checkedKeys = this.$refs.tree.getCheckedKeys()
-      this.role.routes = this.generateTree(deepClone(this.serviceRoutes), '/', checkedKeys)
+      this.role.routes = this.generateTree(
+        deepClone(this.serviceRoutes),
+        '/',
+        checkedKeys
+      )
 
       if (isEdit) {
         await updateRole(this.role.key, this.role)
@@ -237,7 +277,9 @@ export default {
     // reference: src/view/layout/components/Sidebar/SidebarItem.vue
     onlyOneShowingChild(children = [], parent) {
       let onlyOneChild = null
-      const showingChildren = children.filter(item => !(item.meta && item.meta.hidden))
+      const showingChildren = children.filter(
+        item => !(item.meta && item.meta.hidden)
+      )
 
       // When there is only one child route, the child route is displayed by default
       if (showingChildren.length === 1) {
@@ -248,7 +290,7 @@ export default {
 
       // Show parent if there are no child route to display
       if (showingChildren.length === 0) {
-        onlyOneChild = { ... parent, path: '', noShowingChildren: true }
+        onlyOneChild = { ...parent, path: '', noShowingChildren: true }
         return onlyOneChild
       }
 

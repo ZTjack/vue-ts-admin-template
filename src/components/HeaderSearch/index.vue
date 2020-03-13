@@ -1,6 +1,10 @@
 <template>
-  <div :class="{'show':show}" class="header-search">
-    <svg-icon class-name="search-icon" icon-class="search" @click.stop="click" />
+  <div :class="{ show: show }" class="header-search">
+    <svg-icon
+      class-name="search-icon"
+      icon-class="search"
+      @click.stop="click"
+    />
     <el-select
       ref="headerSearchSelect"
       v-model="search"
@@ -12,7 +16,12 @@
       class="header-search-select"
       @change="change"
     >
-      <el-option v-for="item in options" :key="item.path" :value="item" :label="item.title.join(' > ')" />
+      <el-option
+        v-for="item in options"
+        :key="item.path"
+        :value="item"
+        :label="item.title.join(' > ')"
+      />
     </el-select>
   </div>
 </template>
@@ -27,7 +36,6 @@ import path from 'path'
 @Component({
   name: 'HeaderSearch'
 })
-
 export default class extends Vue {
   private search = ''
   private options: RouteConfig[] = []
@@ -65,12 +73,14 @@ export default class extends Vue {
   private click() {
     this.show = !this.show
     if (this.show) {
-      this.$refs.headerSearchSelect && (this.$refs.headerSearchSelect as HTMLElement).focus()
+      this.$refs.headerSearchSelect &&
+        (this.$refs.headerSearchSelect as HTMLElement).focus()
     }
   }
 
   private close() {
-    this.$refs.headerSearchSelect && (this.$refs.headerSearchSelect as HTMLElement).blur()
+    this.$refs.headerSearchSelect &&
+      (this.$refs.headerSearchSelect as HTMLElement).blur()
     this.options = []
     this.show = false
   }
@@ -91,23 +101,32 @@ export default class extends Vue {
       distance: 100,
       maxPatternLength: 32,
       minMatchCharLength: 1,
-      keys: [{
-        name: 'title',
-        weight: 0.7
-      }, {
-        name: 'path',
-        weight: 0.3
-      }]
+      keys: [
+        {
+          name: 'title',
+          weight: 0.7
+        },
+        {
+          name: 'path',
+          weight: 0.3
+        }
+      ]
     })
   }
   // Filter out the routes that can be displayed in the sidebar
   // And generate the internationalized title
-  private generateRoutes(routes: RouteConfig[], basePath = '/', prefixTitle: string[] = []):RouteConfig[] {
-    let res:RouteConfig[] = []
+  private generateRoutes(
+    routes: RouteConfig[],
+    basePath = '/',
+    prefixTitle: string[] = []
+  ): RouteConfig[] {
+    let res: RouteConfig[] = []
 
     for (const router of routes) {
       // skip hidden router
-      if (router.meta && router.meta.hidden) { continue }
+      if (router.meta && router.meta.hidden) {
+        continue
+      }
 
       const data = {
         path: path.resolve(basePath, router.path),
@@ -126,7 +145,11 @@ export default class extends Vue {
 
       // recursive child routes
       if (router.children) {
-        const tempRoutes = this.generateRoutes(router.children, data.path, data.title)
+        const tempRoutes = this.generateRoutes(
+          router.children,
+          data.path,
+          data.title
+        )
         if (tempRoutes.length >= 1) {
           res = [...res, ...tempRoutes]
         }

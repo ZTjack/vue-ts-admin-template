@@ -11,9 +11,13 @@
       <svg-icon class-name="size-icon" icon-class="size" />
     </div>
     <el-dropdown-menu slot="dropdown">
-      <el-dropdown-item v-for="item of sizeOptions" :key="item.value" :disabled="size===item.value" :command="item.value">
-        {{
-          item.label }}
+      <el-dropdown-item
+        v-for="item of sizeOptions"
+        :key="item.value"
+        :disabled="size === item.value"
+        :command="item.value"
+      >
+        {{ item.label }}
       </el-dropdown-item>
     </el-dropdown-menu>
   </el-dropdown>
@@ -39,8 +43,8 @@ export default class extends Vue {
     return AppModule.size
   }
 
-  private handleSetSize(size:string) {
-    (this as any).$ELEMENT.size = size
+  private handleSetSize(size: string) {
+    ;(this as any).$ELEMENT.size = size
     AppModule.setSize(size)
     this.refreshView()
     this.$message({

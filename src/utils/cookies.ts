@@ -10,8 +10,10 @@ import Cookies from 'js-cookie'
 
 // App
 const sidebarStatusKey = 'sidebarStatus'
-export const getSidebarStatus = () => Cookies.get('sidebarStatus') ? !!Cookies.get('sidebarStatus') : true
-export const setSidebarStatus = (sidebarStatus: number) => Cookies.set(sidebarStatusKey, sidebarStatus.toString())
+export const getSidebarStatus = () =>
+  Cookies.get('sidebarStatus') ? !!Cookies.get('sidebarStatus') : true
+export const setSidebarStatus = (sidebarStatus: number) =>
+  Cookies.set(sidebarStatusKey, sidebarStatus.toString())
 
 // elementUI size
 const sizeKey = 'size'
@@ -23,4 +25,3 @@ const tokenKey = 'Admin-Token'
 export const getToken = () => Cookies.get(tokenKey)
 export const setToken = (token: string) => Cookies.set(tokenKey, token)
 export const removeToken = () => Cookies.remove(tokenKey)
-

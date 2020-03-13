@@ -7,7 +7,7 @@
  */
 import permission from './permission'
 
-const install = function(Vue:any) {
+const install = function(Vue: any) {
   Vue.directive('permission', permission)
 }
 

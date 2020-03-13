@@ -5,7 +5,13 @@
  * @LastEditTime : 2020-01-17 16:14:51
  * @Description:
  */
-import { VuexModule, Module, Mutation, Action, getModule } from 'vuex-module-decorators'
+import {
+  VuexModule,
+  Module,
+  Mutation,
+  Action,
+  getModule
+} from 'vuex-module-decorators'
 import { RouteConfig } from 'vue-router'
 import { asyncRoutes, constantRoutes } from '@/router'
 import store from '@/store'

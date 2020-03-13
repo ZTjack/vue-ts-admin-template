@@ -22,7 +22,7 @@ import { isExternal } from '@/utils/validate'
 })
 export default class extends Vue {
   @Prop({ required: true, type: String }) private to!: string
-  private linkProps(url:string) {
+  private linkProps(url: string) {
     if (isExternal(url)) {
       return {
         is: 'a',

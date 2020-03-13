@@ -1,6 +1,6 @@
 import Clipboard from './clipboard'
 
-const install = function(Vue:any) {
+const install = function(Vue: any) {
   Vue.directive('Clipboard', Clipboard)
 }
 // @ts-ignore

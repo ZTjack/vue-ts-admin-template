@@ -1,4 +1,10 @@
-import { VuexModule, Module, Action, Mutation, getModule } from 'vuex-module-decorators'
+import {
+  VuexModule,
+  Module,
+  Action,
+  Mutation,
+  getModule
+} from 'vuex-module-decorators'
 import { login, logout, getInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/cookies'
 import router, { resetRouter } from '@/router'
@@ -49,63 +55,69 @@ class User extends VuexModule implements IUserState {
   }
 
   @Action
-  public async login(userInfo: { username: string, password: string}) {
+  public async login(userInfo: { username: string; password: string }) {
     const { username, password } = userInfo
     return new Promise((resolve, reject) => {
-      login({ username: username.trim(), password: password }).then(response => {
-        const { data } = response
-        this.SET_TOKEN(data.token)
-        setToken(data.token)
-        resolve()
-      }).catch((error:any) => {
-        reject(error)
-      })
+      login({ username: username.trim(), password: password })
+        .then(response => {
+          const { data } = response
+          this.SET_TOKEN(data.token)
+          setToken(data.token)
+          resolve()
+        })
+        .catch((error: any) => {
+          reject(error)
+        })
     })
   }
 
   @Action
   public async getInfo() {
     return new Promise((resolve, reject) => {
-      getInfo(this.token).then((response:any) => {
-        const { data } = response
+      getInfo(this.token)
+        .then((response: any) => {
+          const { data } = response
 
-        if (!data) {
-          reject('Verification failed, please Login again.')
-        }
+          if (!data) {
+            reject('Verification failed, please Login again.')
+          }
 
-        const { roles, name, avatar, introduction } = data
+          const { roles, name, avatar, introduction } = data
 
-        // roles must be a non-empty array
-        if (!roles || roles.length <= 0) {
-          reject('getInfo: roles must be a non-null array!')
-        }
+          // roles must be a non-empty array
+          if (!roles || roles.length <= 0) {
+            reject('getInfo: roles must be a non-null array!')
+          }
 
-        this.SET_ROLES(roles)
-        this.SET_NAME(name)
-        this.SET_AVATAR(avatar)
-        this.SET_INTRODUCTION(introduction)
-        resolve(data)
-      }).catch((error:any) => {
-        reject(error)
-      })
+          this.SET_ROLES(roles)
+          this.SET_NAME(name)
+          this.SET_AVATAR(avatar)
+          this.SET_INTRODUCTION(introduction)
+          resolve(data)
+        })
+        .catch((error: any) => {
+          reject(error)
+        })
     })
   }
 
   @Action
   public async logout() {
     return new Promise((resolve, reject) => {
-      logout().then(() => {
-        this.SET_TOKEN('')
-        this.SET_ROLES([])
-        removeToken()
-        resetRouter()
-        // reset visited views and cached views
-        // to fixed https://github.com/PanJiaChen/vue-element-admin/issues/2485
-        TagsViewModule.delAllViews()
-        resolve()
-      }).catch(error => {
-        reject(error)
-      })
+      logout()
+        .then(() => {
+          this.SET_TOKEN('')
+          this.SET_ROLES([])
+          removeToken()
+          resetRouter()
+          // reset visited views and cached views
+          // to fixed https://github.com/PanJiaChen/vue-element-admin/issues/2485
+          TagsViewModule.delAllViews()
+          resolve()
+        })
+        .catch(error => {
+          reject(error)
+        })
     })
   }
 

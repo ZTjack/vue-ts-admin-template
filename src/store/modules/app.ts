@@ -6,8 +6,19 @@
  * @Description:
  */
 
-import { VuexModule, Module, Mutation, Action, getModule } from 'vuex-module-decorators'
-import { getSidebarStatus, getSize, setSidebarStatus, setSize } from '@/utils/cookies'
+import {
+  VuexModule,
+  Module,
+  Mutation,
+  Action,
+  getModule
+} from 'vuex-module-decorators'
+import {
+  getSidebarStatus,
+  getSize,
+  setSidebarStatus,
+  setSize
+} from '@/utils/cookies'
 import store from '@/store'
 
 export enum DeviceType {
@@ -84,4 +95,3 @@ class App extends VuexModule implements IAppState {
 }
 
 export const AppModule = getModule(App)
-

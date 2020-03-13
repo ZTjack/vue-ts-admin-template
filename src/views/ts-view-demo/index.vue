@@ -8,20 +8,10 @@
 <template>
   <dir>
     <h1>Ts View Demo</h1>
-    <test-component
-      msg="Hello World"
-      test-str="123"
-    />
-    <div>
-      Str: {{ str }}
-    </div>
-    <div>
-      computedStr: {{ computedStr }}
-    </div>
-    <el-button
-      type="primary"
-      @click="setNewStr"
-    >
+    <test-component msg="Hello World" test-str="123" />
+    <div>Str: {{ str }}</div>
+    <div>computedStr: {{ computedStr }}</div>
+    <el-button type="primary" @click="setNewStr">
       set new str
     </el-button>
   </dir>
@@ -46,7 +36,7 @@ import TestComponent from './component.vue'
 export default class extends Vue {
   @Prop() msg!: string
   @Prop({ default: 'test' }) testStr!: string
-  @Prop() strOrNUm !: string | number
+  @Prop() strOrNUm!: string | number
 
   private str = 'testStr'
   private testObj = { a: 1, b: null }

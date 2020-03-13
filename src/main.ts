@@ -42,7 +42,7 @@ Vue.use(Element, {
 
 // register global utility filters
 Object.keys(filters).forEach(key => {
-  Vue.filter(key, (filters as { [key: string ]: Function })[key])
+  Vue.filter(key, (filters as { [key: string]: Function })[key])
 })
 
 /**

@@ -8,17 +8,38 @@
 
 <template>
   <div v-if="!(item.meta && item.meta.hidden)">
-    <template v-if="hasOneShowingChild(item, item.children) && (!onlyOneChild.children||onlyOneChild.noShowingChildren)&&!(item.meta&&item.meta.alwaysShow)">
+    <template
+      v-if="
+        hasOneShowingChild(item, item.children) &&
+          (!onlyOneChild.children || onlyOneChild.noShowingChildren) &&
+          !(item.meta && item.meta.alwaysShow)
+      "
+    >
       <app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.path)">
-        <el-menu-item :index="resolvePath(onlyOneChild.path)" :class="{'submenu-title-noDropdown':!isNest}">
-          <item :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)" :title="onlyOneChild.meta.title" />
+        <el-menu-item
+          :index="resolvePath(onlyOneChild.path)"
+          :class="{ 'submenu-title-noDropdown': !isNest }"
+        >
+          <item
+            :icon="onlyOneChild.meta.icon || (item.meta && item.meta.icon)"
+            :title="onlyOneChild.meta.title"
+          />
         </el-menu-item>
       </app-link>
     </template>
 
-    <el-submenu v-else ref="subMenu" :index="resolvePath(item.path)" popper-append-to-body>
+    <el-submenu
+      v-else
+      ref="subMenu"
+      :index="resolvePath(item.path)"
+      popper-append-to-body
+    >
       <template slot="title">
-        <item v-if="item.meta" :icon="item.meta && item.meta.icon" :title="item.meta.title" />
+        <item
+          v-if="item.meta"
+          :icon="item.meta && item.meta.icon"
+          :title="item.meta.title"
+        />
       </template>
       <sidebar-item
         v-for="child in item.children"
@@ -44,7 +65,8 @@ import { AppModule, DeviceType } from '@/store/modules/app'
 @Component({
   name: 'SidebarItem',
   components: {
-    Item, AppLink
+    Item,
+    AppLink
   }
 })
 export default class extends Vue {
@@ -52,14 +74,14 @@ export default class extends Vue {
   @Prop({ type: Boolean, default: false }) private isNest!: boolean
   @Prop({ type: String, default: '' }) private basePath!: string
 
-  private onlyOneChild:any
+  private onlyOneChild: any
 
   get device() {
     return AppModule.device
   }
 
-  private hasOneShowingChild(parent:any, children = []) {
-    const showingChildren = children.filter((item:any) => {
+  private hasOneShowingChild(parent: any, children = []) {
+    const showingChildren = children.filter((item: any) => {
       if (item.meta && item.meta.hidden) {
         return false
       } else {
@@ -76,7 +98,7 @@ export default class extends Vue {
 
     // Show parent if there are no child router to display
     if (showingChildren.length === 0) {
-      this.onlyOneChild = { ... parent, path: '', noShowingChildren: true }
+      this.onlyOneChild = { ...parent, path: '', noShowingChildren: true }
       return true
     }
     return false
@@ -98,7 +120,7 @@ export default class extends Vue {
       // @ts-ignore
       const handleMouseleave = $subMenu.handleMouseleave
       // @ts-ignore
-      $subMenu.handleMouseleave = (e:Event) => {
+      $subMenu.handleMouseleave = (e: Event) => {
         if (this.device === DeviceType.Mobile) {
           return
         }

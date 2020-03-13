@@ -22,7 +22,6 @@ import { TagsViewModule } from '@/store/modules/tagsView'
 @Component({
   name: 'AppMain'
 })
-
 export default class extends Vue {
   get cachedViews() {
     return TagsViewModule.cachedViews
@@ -42,7 +41,7 @@ export default class extends Vue {
   overflow: hidden;
 }
 
-.fixed-header+.app-main {
+.fixed-header + .app-main {
   padding-top: 50px;
 }
 
@@ -52,7 +51,7 @@ export default class extends Vue {
     min-height: calc(100vh - 84px);
   }
 
-  .fixed-header+.app-main {
+  .fixed-header + .app-main {
     padding-top: 84px;
   }
 }

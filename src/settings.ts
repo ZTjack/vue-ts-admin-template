@@ -18,7 +18,7 @@ interface ISettings {
 }
 
 const settings: ISettings = {
-  title: 'Jack\'s VUE TS TEMPLATE',
+  title: "Jack's VUE TS TEMPLATE",
   showSettings: true,
   tagsView: true,
   fixedHeader: false,
@@ -27,4 +27,3 @@ const settings: ISettings = {
 }
 
 export default settings
-
